@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="Connection"
+  id="myeclipse.1405066121765"
+  context-root="/Connection"
+  j2ee-spec="5.0"
+  archive="Connection.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
