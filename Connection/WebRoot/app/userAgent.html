@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+var bForcepc = fGetQuery("i") == "pc";  
+function fBrowserRedirect(){  
+    var sUserAgent = navigator.userAgent.toLowerCase();
+    document.writeln(sUserAgent);
+    var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";    
+    var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";  
+    var bIsMidp = sUserAgent.match(/midp/i) == "midp";  
+    var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";  
+    var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";  
+    var bIsAndroid = sUserAgent.match(/android/i) == "android";  
+    var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";  
+    var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+
+    var bIsWindows = sUserAgent.match(/windows/i) == "windows";
+    var bIsChrome = sUserAgent.match(/chrome/i) == "chrome";
+    var bIsMsie = sUserAgent.match(/msie/i) == "msie";
+    var bIsFirefox = sUserAgent.match(/firefox/i) == "firefox";
+    var bIsOpera = sUserAgent.match(/opera/i) == "opera";
+    
+    var bIsQQ = sUserAgent.match(/qq/i) == "qq"
+    var bIsWX = sUserAgent.match(/micromessenger/i) == "micromessenger"
+    var bIsXiaomi = sUserAgent.match(/xiaomi/i) == "xiaomi"
+    var bIsUcPhone = sUserAgent.match(/ucbrowser/i) == "ucbrowser"
+    if(!bForcepc){
+	    if(bIsWindows){
+	    	alert("这是PC端的浏览器");
+	    }
+	    if(bIsChrome){
+	    	alert("这是谷歌浏览器");
+	    }
+	    if(bIsMsie){
+	    	alert("这是IE内核浏览器");
+	    }
+	    if(bIsFirefox){
+	    	alert("这是火狐浏览器");
+	    }
+	    if(bIsOpera){
+	    	alert("这是欧鹏浏览器");
+	    }
+	    if(bIsIpad){
+	        var sUrl = location.href;
+	        	alert("这是ipad");
+	//            window.location.href = "<a href="http://ipad.jiezo.com/" target="_blank" rel="external">http://ipad.jiezo.com/</a>";  
+	    }
+	    if(bIsIphoneOs){
+	        var sUrl = location.href;
+	        	alert("这是iphone");
+	//            window.location.href = "<a href="http://smart.jiezo.com/" target="_blank" rel="external">http://smart.jiezo.com/</a>";  
+	    }
+	    if(bIsAndroid){
+	        var sUrl = location.href;
+	        	alert("这是adnroid");
+	//            window.location.href = "<a href="http://smart.jiezo.com/" target="_blank" rel="external">http://smart.jiezo.com/</a>";  
+	    }
+	    if(bIsMidp||bIsUc7||bIsUc||bIsCE||bIsWM){
+	        var sUrl = location.href;      
+	        	alert("这是midp uc7 uc windows ce mobile");
+	//            window.location.href = "<a href="http://m.jiezo.com/" target="_blank" rel="external">http://m.jiezo.com/</a>";  
+	    }
+	    if(bIsQQ){
+	    	alert("这是QQ浏览器");
+	    }
+	    if(bIsWX){
+	    	alert("这是微信浏览器");
+	    }
+	    if(bIsXiaomi){
+	    	alert("这是小米浏览器");
+	    }
+	    if(bIsUcPhone){
+	    	alert("这是uc浏览器");
+	    }
+    }
+}
+/**
+ * 获取参数值
+ * 如: url=http://www.sohu.htm?i=1
+ * location.search的值就是"?i=1"
+ * substr(1) 就是从索引1开始截取
+ */
+function fGetQuery(name){
+	var search = window.location.search;
+    var sUrl = search.substr(1);
+	console.log(search);
+	console.log(search.substr(0));
+	console.log(sUrl);
+    var r = sUrl.match(new RegExp("(^|&)" + name + "=([^&]*)(&|$)"));
+    console.log(new RegExp("(^|&)dv=([^&]*)(&|$)"));
+    console.log(r);
+    return (r == null ? null : unescape(r[2]));  
+}   
+
+fBrowserRedirect();
+</script>
+</head>
+
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+
+#menu-div ul{
+	text-align: center;
+	font:12px verdana, arial, sans-serif; /* 设置文字大小和字体样式 */
+	margin-left: 5%;
+}
+#menu-div ul li{
+	list-style:none; /* 将默认的列表符号去掉 */
+	float:left; /*往左浮动 */
+	padding:0; /*将默认的内边距去掉 */
+	margin:0; /*将默认的外边距去掉  */
+}
+#menu-div ul li a {
+	display:block; /* 将链接设为块级元素 */
+	padding:8px; /* 设置内边距 */
+	width:120px;
+	background:#3A4953; /* 设置背景色 */
+	color:#fff; /* 设置文字颜色 */
+	text-decoration:none; /* 去掉下划线 */
+	border-right:1px solid #000; /* 在左侧加上分隔线 */
+}
+#menu-div ul li a:hover{
+	background:#2E7AAD;
+	color:#000;
+}
+#menu-div ul li:hover ul,.menu ul a:hover ul{
+	visibility:visible;
+}
+/*二级菜单*/
+#menu-div ul li ul{
+	visibility: hidden;
+	position: absolute;
+}
+#menu-div ul li ul li{
+	list-style:none; 
+	float:none;
+	padding:0;
+	margin:0;
+}
+#menu-div ul li ul li a {
+	display:block; /* 将链接设为块级元素 */
+	padding:8px; /* 设置内边距 */
+	width:120px;
+	margin-left:-108px;
+	/* background:#3A4953; */ /* 设置背景色 */
+	background:rgba(8, 19, 37, 0.33); /* 设置背景色 */
+	color: #fff; /* 设置文字颜色 */
+	text-decoration:none; /* 去掉下划线 */
+	border-top:1px solid #000; /* 在左侧加上分隔线 */
+}
+#menu-div ul li ul li a:hover {
+	text-decoration: none;
+	color: #fff;
+	background-color: #3A4953;
+}
+.table-div{
+	border: 1px solid;
+	display: inline-block;
+	margin-left: 5%;	
+}
+.table-div th{
+	height: 30px;
+}
+table{
+	border-color:#F0830E;
+	text-align: left;
+}
+table tr td{
+	padding-left:5px;
+}
+
+a:link {
+	font-family: "宋体";
+	/* font-size: 16px; */
+	color: #000000;
+	text-decoration: none;
+}
+a:visited {
+	font-family: "宋体";
+	/* font-size: 16px; */
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	font-family: "宋体";
+	/* font-size: 16px; */
+	color: #FF6600;
+	text-decoration: underline;
+}

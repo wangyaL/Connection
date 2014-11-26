@@ -1,0 +1,14 @@
+.detail-struts{
+	margin-left: 5%;
+	margin-right: 15%;
+	color: red;
+}
+/*table 后的action显示*/
+#detail-action{
+	/* width: 250px; */
+	color: blue;
+}
+
+.detail-title{
+	
+}

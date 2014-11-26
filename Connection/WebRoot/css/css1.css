@@ -1,0 +1,18 @@
+div {
+	float: left;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	font-size: 12px;
+}
+
+#img_div {
+	width: 241px;
+	height: 241px;
+	background-image: url("../assets/goods/2.png");
+	/* background-image: url("../assets/goods/small/2014092511404389617.jpg"); */
+	/* position:absolute;
+	clip:rect(0px 241px 241px 0px) */
+}

@@ -1,0 +1,46 @@
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<style type="text/css">
+		div{
+			float: left;
+			width: 100%;
+			height: 100%;
+		}
+		/* Phone Portrait (320px) */
+		@media only screen and (max-width: 500px) {
+		    body{font-size: 12px;}
+		    #img_div { 
+		    	width: 241px;
+		    	height: 241px;
+			    background-image: url("../assets/goods/2.png");
+			    /* position:absolute;
+				clip:rect(0px 241px 241px 0px) */
+			}
+/* 		    #img_div { width: 100%;background-image: url("../assets/goods/small/2014092511404389617.jpg");} */
+		}
+		@media only screen and (min-width: 501px) and (max-width: 800px){
+			body{font-size: 20px;}
+		    #img_div {
+		    	
+		    }
+		}
+		@media only screen and (min-width: 801px){
+			body{font-size: 28px;color: red;}
+		    #img_div {
+			     background-image: url("../assets/goods/1.jpg");
+		     }
+/* 		    #img_div { width: 100%;background-image: url("../assets/goods/2014092511404389617.jpg");} */
+		}
+	</style>
+</head>
+<body>
+	
+	<span>浏览器打开后，调节窗口大小，可以看到不同的布局结构，(<=500、501-800、>801)</span>
+	<div id="img_div">
+	</div>
+
+</body>
+</html>

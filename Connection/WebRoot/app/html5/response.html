@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<!--[if (lte IE 8)]>
+		  <link rel="stylesheet" href="http://hirondelleusa.org/wp-content/themes/html5-barrel-blank/css/ie.css"/>
+		  <script type="text/javascript" src="http://hirondelleusa.org/wp-content/themes/html5-barrel-blank/js/iehtml5.js"></script>
+		  <script type="text/javascript" src="http://hirondelleusa.org/wp-content/themes/html5-barrel-blank/js/selectivizr-min.js"></script>
+	<![endif]-->
+	<!--[if lt IE 9]>  
+		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>  
+	<![endif]-->
+	<style type="text/css">
+		div{
+			float: left;
+		}
+		#div_1{
+			width: 90%;
+			background-color: #f00;
+		}
+		#div_2{
+			width: 60%;
+			background-color: #ff0;
+		}
+		#div_3{
+			width: 40%;
+			background-color: #0f0;
+		}
+		#div_4{
+			width: 20%;
+			background-color: #15FAE8;
+		}
+		#div_5{
+			width: 80%;
+			background-color: #f0f;
+		}
+		/* Phone Portrait (320px) */
+		@media only screen and (max-width: 500px) {
+		    #head { width: 100%; }
+		    #main { width: 100%; }
+		    #foot { width: 100%; }
+		    #left { width: 100%; }
+		    #right { width: 100%;}
+		    
+		    div{font-size: 12px;height: 40px;}
+		    #div_1 { width: 100%;}
+		    #div_2 { width: 100%;}
+		    #div_3 { width: 100%;}
+		    #div_4 { width: 100%;}
+		    #div_5 { width: 100%;}
+		}
+		@media only screen and (min-width: 501px) and (max-width: 800px){
+			div{font-size: 20px;height: 60px;}
+		    #div_1 { width: 50%;}
+		    #div_2 { width: 50%;}
+		    #div_3 { width: 50%;}
+		    #div_4 { width: 50%;}
+		    #div_5 { width: 50%;}
+		}
+		@media only screen and (min-width: 801px){
+			div{font-size: 28px;height: 80px;}
+		    #div_1 { width: 50%;}
+		    #div_2 { width: 50%;}
+		    #div_3 { width: 30%;}
+		    #div_4 { width: 40%;}
+		    #div_5 { width: 30%;}
+		}
+	</style>
+</head>
+<body>
+	
+	<div>
+	浏览器打开后，调节窗口大小，可以看到不同的布局结构，(<=500、501-800、>801)
+	</div>
+	<div id="div_1">
+	第一个div模块
+	</div>
+	<div id="div_2">
+	第二个div模块
+	</div>
+	<div id="div_3">
+	第三个div模块
+	</div>
+	<div id="div_4">
+	第四个div模块
+	</div>
+	<div id="div_5">
+	第五个div模块
+	</div>
+</body>
+</html>
