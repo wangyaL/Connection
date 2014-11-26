@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<meta charset="utf-8"/>
+<body>
+<h1>3.2 新增的非主体结构元素</h1>
+<ol>
+	<li><a href="#3.2.1">header元素</a>
+	<li><a href="#3.2.2">hgroup元素</a>
+	<li><a href="#3.2.3">footer元素</a>
+	<li><a href="#3.2.4">address元素</a>
+</ol>
+
+<hr>
+<h2 id="3.2.1">3.2.1 header元素</h2>
+<article>
+	<p>
+		header元素是一种具有引导和导航作用的结构元素，通常用来放置整个页面或页面内的一个内容区块的标题，
+		但也可以包含其他内容，例如数据表格、搜索表单或相关的logo图片。
+	</p>
+	<p>
+		需要强调的一点是：一个网页内并未限制header元素的个数，可以拥有多个，可以为每个内容区块加一个header元素。
+	</p>
+	<p>
+		在HTML5中，一个header元素通常包含一个heading元素（h1-h6），也可以包含我们后面将要讨论的hgroup元素，
+		还可以包含其他元素（譬如table或form），根据最新的W3C HTML5标准，还可以包含nav元素。
+	</p>
+</article>
+
+
+<hr>
+<h2 id="3.2.2">3.2.2 hgroup元素</h2>
+<article>
+	hgroup元素是将标题及其子标题进行分组的元素。hgroup元素通常会将h1~h6元素进行分组，譬如一个内容区块的标题及其子
+	标题算一组。<br>
+	通常，如果文章只有一个主标题，是不需要hgroup元素的。<br>
+	但是，如果文章有主标题，主标题下有子标题，就需要使用hgroup元素了。
+</article>
+
+<hr>
+<h2 id="3.2.3">3.2.3 footer元素</h2>
+<article>
+	footer元素可以作为其上层父级内容区块或是一个根区块的脚注。footer通常包括其相关区块的脚注信息，如作者、相关阅读
+	连接及版权信息等。<br>
+	在HTML5出现之前，我们使用下面的方式编写页脚<br>
+	&lt;div id="footer"&gt;<br>
+&emsp;	&lt;ul&gt;<br>
+&emsp;&emsp;	&lt;li&gt;版权信息&lt;/li&gt;<br>
+&emsp;&emsp;	&lt;li&gt;站点地图&lt;/li&gt;<br>
+&emsp;&emsp;	&lt;li&gt;联系方式&lt;/li&gt;<br>
+&emsp;	&lt;/ul&gt;<br>
+	&lt;/div&gt;<br>
+	但是到了HTML5之后，这种方式不再使用，而是使用更加语义化的footer元素来替代，<br>
+	&lt;footer&gt;<br>
+&emsp;	&lt;ul&gt;<br>
+&emsp;&emsp;	&lt;li&gt;版权信息&lt;/li&gt;<br>
+&emsp;&emsp;	&lt;li&gt;站点地图&lt;/li&gt;<br>
+&emsp;&emsp;	&lt;li&gt;联系方式&lt;/li&gt;<br>
+&emsp;	&lt;/ul&gt;<br>
+	&lt;/footer&gt;<br>
+	与header元素一样，一个页面中也未限制footer元素的个数。同时，可以为article元素或section元素添加footer元素。
+	
+</article>
+
+<hr>
+<h2 id="3.2.4">3.2.4 address元素</h2>
+<article>
+	address元素用来在文档中呈现联系信息，包含文档作者或文档维护者的名字、他们的网站连接、电子邮箱、真实地址、电话号码等。
+</article>
+
+</body>
+</html>
