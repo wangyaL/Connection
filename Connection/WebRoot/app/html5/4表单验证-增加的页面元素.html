@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>4.2 表单验证</title>
+
+<script type="text/javascript">
+function check() {
+	var email = document.getElementById("email");
+	if(email.value==""){
+		alert("请输入Email地址");
+		return false;
+	}else if(!email.checkValidity()){
+		alert("请输入正确的Email地址");
+	}else{
+		alert("您输入的Email地址有效");
+	}
+}
+function button_onclick() {
+	var progressBar = document.getElementById("p");
+	progressBar.getElementsByTagName("span")[0].textContent = "0";
+/* 	for (var i = 0; i <= 100; i++) {
+		updateProgress(i);
+	} */
+	var i = progressBar.value;
+	var j = progressBar.max;
+	if(i<= j-5){
+		i += 5;
+	}else{
+		alert("已经是最大了");
+	}
+	updateProgress(i);
+}
+function updateProgress(newValue) {
+	var progressBar = document.getElementById("p");
+	progressBar.value = newValue;
+	progressBar.getElementsByTagName("span")[0].text = newValue;
+}
+</script>
+</head>
+<body>
+
+	<form action="" name="form1">
+		<input required="required" pattern="[0-9][A-Z]{3}" 
+			name="part" placeholder="输入内容：一个数字与三个大写字母。">
+		<input type="submit" value="提交">
+	</form>
+
+	<form action="" name="form2" id="id_form2" onsubmit="return check();">
+		<label for="email">Email</label>
+		<input name="email" id="email" type="email"><br>
+		<input type="number" formnovalidate="formnovalidate">
+		<input type="submit">
+	</form>
+	<hr>
+	<h1>4.3.1 新增的figure元素与figcaption元素</h1>
+	<figure>
+		<img alt="图片" src="../../assets/goods/1.jpg" width="206" height="116">
+	</figure>
+	
+	<figure>
+		<img alt="图片二" src="../../assets/goods/1.jpg" width="206" height="116">
+		<figcaption>图片二</figcaption>
+	</figure>
+	
+	<figure>
+		<img alt="图片1" src="../../assets/goods/1.jpg" width="206" height="116">
+		<img alt="图片2" src="../../assets/goods/2.png" width="116" height="116">
+		<img alt="图片3" src="../../assets/goods/2014092511404389617.jpg" width="100" height="116">
+		<figcaption>我喜欢的图片</figcaption>
+	</figure>
+	
+	<hr>
+	<h1>4.3.2 新增的details元素</h1>
+	<details open style="width: 200px;">
+		<summary>精武风云</summary>
+		<p>陈真（甄子丹 饰）当年为报杀师之仇，独闯虹口道场...（精武风云电影介绍）
+	</details>
+	
+	<hr>
+	<h1>4.3.3 新增的mark元素</h1>
+	<p>需要突出显示的或高亮显示的
+	<p>&ensp;&ensp;在HTML4中，你可能已经习惯于用em元素或strong元素来突出显示文字，
+	<em>但请记住mark元素的作用与这两个元素的作用是有区别的</em>，不能混同使用。
+	<strong>mark</strong>元素的标识目的与原文作者无关，
+	或者说它不是原文作者用来标识文字的，而是在后来引用时添加上去的，它的目的是吸引当前用户的注意力，提供给用户作参考，
+	希望能够对用户有帮助。而<strong>strong</strong>是原文作者用来强调一段文字的重要性，譬如警告信息、错误信息等，
+	<strong>em</strong>元素是作者为了突出文章重点而使用的。
+	
+	<hr>
+	<h1>4.3.4 新增的progress元素</h1>
+	<section>
+		<h2>progress元素的使用示例</h2>
+		<p>完成百分比：<progress id="p" max="200" value="10"><span>0</span>%</progress></p>
+		<input type="button" onclick="button_onclick()" value="请点击">
+	</section>
+	
+	<hr>
+	<h1>4.3.5新增的meter元素</h1>
+	<p>磁盘使用量：<meter value="40" min="0" max="160">40/160</meter>GB</p>
+	<p>你的得分是：
+		<meter value="91" min="0" max="100" low="40" high="90" optimum="100">A+</meter>
+	</p>
+	<!-- 不是一定要使用属性 -->
+	<meter value="0.8">80%</meter>
+	<meter value="0.75">3/4</meter>
+	<p>在IE6/7/8中，需要在JavaScript脚本中添加如下代码，放可使用该元素。
+	<xmp>
+	<!--[if IE]>
+	<script src="http://HTML5shiv.googlecode.com/svn/trunk/HTML5.js"></script> 
+	<![endif] -->
+	</xmp>
+	
+	<hr>
+	<h1>4.3.7改良的ol元素</h1>
+	<h3>ol列表的start属性示例</h3>
+	<ol start="5">
+		<li>列表内容5</li>
+		<li>列表内容6</li>
+		<li>列表内容7</li>
+		<li>列表内容8</li>
+	</ol>
+
+	<hr>
+	<h1>4.3.8改良的dl元素</h1>
+	<h3>用于术语解释的dl列表示例</h3>
+	<article>
+		<h1>atricle元素</h1>
+		<p>一块独立的内容。它可以用来表示RSS中一块独立的内容，也可以用例表示博客中独立的一篇文章。...</p>
+		<aside>
+			<h2>术语解释</h2>
+			<dl>
+				<dt><dfn>RSS</dfn></dt>
+				<dd>RSS也叫聚合RSS是在线共享的一种简易方式（也叫聚会内容）...</dd>
+				<dt><dfn>博客</dfn></dt>
+				<dd>博客，又译为网络日志、部落格或部落阁等，是一种通常由个人管理...</dd>
+			</dl>
+		</aside>
+	</article>
+	<dl>
+		<dt>作者</dt>
+		<dd>王亚龙</dd>
+		<dt>出版社</dt>
+		<dd>瑜旭网络</dd>
+		<dt>类别</dt>
+		<dd>HTML5学习</dd>
+	</dl>
+
+	<hr>
+	<h1>4.3.9加以严格限制的cite元素</h1>
+	<article>
+		<p>cite元素表示作品（例如一本书、一篇文章、一首歌曲等）的标题。该作品可以在页面中被详细引用，也可以只在页面中提一下。
+		<p>在html4中，cite元素可以用来表示作者，但是在html5中明确规定了不能用cite元素表示包括作者在内的任何人名，
+		因为人的名字不是标题（当然除非标题就是一个人的名字），但是为了与html4或者之前版本的网页兼容，并没有把它当作错误，
+		所以这只是一个规定而已。
+	</article>
+	<p>我最喜欢的电影是由甄子丹主演的<cite>精武风云</cite>。</p>
+	
+	<hr>
+	<h1>4.3.10重定义的small元素</h1>
+	<article>
+		<p>在html5中，对small元素进行了重新定义，使其由
+	</article>
+	
+</body>
+</html>

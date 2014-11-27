@@ -35,21 +35,34 @@
 	</datalist>
 	
 	<br>
-	email:<input type="email">
+	<form name="form1">
+	search:<input type="search">
+	tel:<input type="tel">
 	url:<input type="url">
-	number:<input type="number">
-	range:<input type="range"><br>
+	email:<input type="email"><br>
 	date:<input type="date">
 	month:<input type="month">
 	week:<input type="week">
 	time:<input type="time"><br>
 	datetime:<input type="datetime">
-	datetime-local:<input type="datetime-local">
+	datetime-local:<input type="datetime-local"><br>
+	number:<input type="number">
+	
+	<br>
+	color:<input type="color">
 	<br>
 	<del>标签：del</del>
 	
 	<input autofocus="autofocus" placeholder="默认值 placeholder">
 	<input type="file" multiple="multiple">
+	<br>
+	<input type="submit" value="提交">
+	</form>
+	
+	<form id="output">
+		range:<input type="range" name="range1" min="0" max="100" step="5">
+		<output onforminput="value=range1.value">50</output>
+	</form>
 	
 	<br>
 	<menu type="list" label="&">
