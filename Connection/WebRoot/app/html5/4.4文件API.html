@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>4.4 文件API</title>
+<style type="text/css">
+p{
+	text-indent: 2em;
+	line-height: 25px;
+}
+</style>
+</head>
+<script type="text/javascript">
+
+// 4.4.1
+function showFileName(){
+	var file;
+	//document.getElementById("file").files	//返回FileList文件列表对象
+	for (var i = 0; i < document.getElementById("file").files.length; i++) {
+		file = document.getElementById("file").files[i];
+		alert("第"+(i+1)+"个文件，文件名==>>"+file.name);
+	}
+}
+//4.4.2
+function showFileType(){
+	var file;
+	file = document.getElementById("file_442").files[0];
+	var size = document.getElementById("size_442");
+	//显示文件字节长度
+	size.innerHTML = file.size;
+	var type = document.getElementById("type_442");
+	//显示文件类型
+	type.innerHTML = file.type;
+}
+//4.4.2 2
+function FileUpload(){
+	var file;
+	var files = document.getElementById("file_4422").files;
+	for (var i = 0; i < files.length; i++) {
+		file = files[i];
+		if(!/image\/\w+/.test(file.type)){
+			alert(file.name+"不是图像文件！");
+			break;
+		}else{
+			alert("上传文件==>>"+file.name);
+		}
+	}
+}
+//4.4.3
+console.log(typeof FileReader);
+if (typeof FileReader == 'undefined'){
+	var files = document.getElementById("file_443");
+	var result = document.getElementById("result_443");
+	result.innerHTML = "<p>抱歉，你的浏览器不支持 FileReader";
+	files.setAttribute("disabled", "disabled");
+	alert("您的浏览器未实现FileReader接口");
+} else {
+	var reader = new FileReader();
+	//正常使用浏览器
+}
+
+//将文件以DataURL形式读入页面
+function readAsDataURL(){
+	var file = document.getElementById("file_443").files[0];
+	//检查是否为图像文件
+	if(!/image\/\w+/.test(file.type)){
+		alert(file.name+"不是图像文件！");
+		return false;
+	}
+	var reader = new FileReader();
+	//将文件以DataURL形式读入页面
+	reader.readAsDataURL(file);
+	reader.onload = function(e){
+		console.log(e);
+		console.log(this);
+		var result = document.getElementById("result_443");
+		result.innerHTML = '<img src ="'+this.result+'" alt=""/>';
+	}
+}
+//将文件以二进制形式读入页面
+function readAsBinaryString(){
+	var file = document.getElementById("file_443").files[0];
+	var reader = new FileReader();
+	reader.readAsBinaryString(file);
+	reader.onload = function(f){
+		var result = document.getElementById("result_443");
+		result.innerHTML = this.result;
+	}
+}
+//将文件以文本形式读入页面
+function readAsText(){
+	var file = document.getElementById("file_443").files[0];
+	var reader = new FileReader();
+	reader.readAsText(file);
+	reader.onload = function(f){
+		var result = document.getElementById("result_443");
+		result.innerHTML = this.result;
+	}
+}
+//4432
+function readFile() {
+	var result = document.getElementById("result_4432");
+	var file = document.getElementById("file_4432").files[0];
+	var reader = new FileReader();
+	reader.onabort = function(e){
+		console.log("abort");
+	}
+	reader.onloadstart = function(e){
+		console.log("loadstart");
+	}
+	reader.onprogress = function(e){
+		console.log("progress");
+	}
+	reader.onload = function(e){
+		result.innerHTML = '<img src ="'+this.result+'" alt=""/>';
+		console.log("load");
+	}
+	reader.onloadend = function(e){
+		console.log("loadend");
+	}
+	reader.onerror = function(e){
+		console.log("error");
+	}
+	reader.readAsDataURL(file);
+}
+</script>
+
+<body>
+<article>
+	<h1>4.4.1 FileList对象与file对象</h1>
+	选择文件：<input type="file" id="file" multiple="multiple" size="80">
+	<input type="button" onclick="showFileName()" value="文件都有">
+</article>
+<hr>
+<article>
+	<h1>4.4.2 Blob对象</h1>
+	<p>Blob表示二进制原始数据，它提供一个slice方法，可以通过该方法访问到字节内部的原始数据块。
+	事实上，上面提到的file对象也继承了这个Blob对象。</p>
+	<p>Blob对象有两个属性，<strong>size</strong>属性表示一个Blob对象的字节长度，<strong>type</strong>
+	属性表示Blob的MIME类型，如果是未知类型，则返回一个空字符串。</p>
+	<section>
+		<h1>例1. 显示文件信息</h1>
+		选择文件:<input type="file" id="file_442">
+		<input type="button" value="显示文件信息" onclick="showFileType()"><br>
+		文件字节长度：<span id="size_442"></span><br>
+		文件类型：<span id="type_442"></span><br>
+	</section>
+	<br>
+	<section>
+		<h1>例2. 判断文件类型</h1>
+		选择文件：<input type="file" id="file_4422" multiple="multiple">
+		<input type="button" value="文件上传" onclick="FileUpload()">
+	</section>
+	<p>另外，html5中已经对file控件添加了<strong>accept</strong>属性，企图让file控件只能接受某种类型的文件，
+	但是目前各主流浏览器对其的支持都只限于在打开文件选择窗口时，默认选择图像文件而已，如果选择其他类型
+	文件，file控件也能正常接受。</p>
+	<p>对file控件使用accept属性的方法如下。</p>
+	<section>
+		<h1>例3.</h1>
+		<input type="file" id="file_4423" accept="image/*">
+	</section>
+</article>
+<hr>
+<article>
+	<h1>4.4.3 FileReader接口</h1>
+	<p>FileReader接口主要用来把文件读入内存，并且读取文件中的数据。FileReader接口提供了一个异步API，使用该API可以
+	在浏览器主线程中异步访问文件系统，读取文件中的数据。到目前为止，只有Firefox 3.6+和Google Chrom 6.0+实现了
+	FileReader接口。有一种方法可以检查您的浏览器是否对FileReader接口提供支持，如下所示。</p>
+<xmp>
+if (typeof FileReader == 'undefined'){
+ alert("您的浏览器未实现FileReader接口");
+} else {
+ var reader = new FileReader();
+ //正常使用浏览器
+}
+</xmp>
+	<section>
+		<h1>1. FileReader接口的方法</h1>
+		<p>FileReader接口拥有4个方法，其中3个用以读取文件，另一个用来江都去过程中断。下表列出了这些方法以及它们的参数和
+		功能。需要注意的是：无论读取成功或失败，方法并不会返回读取结果，这一结果存储在result属性中。
+		<ol>
+			<li>
+				<dl>
+					<dt>readAsBinaryString 参数：file</dt>
+					<dd>将文件读取为二进制码。读取为二进制字符串，通常我们将它传送到后端，后端可以通过这段字符串存储文件。</dd>
+				</dl>
+			</li>
+			<li>
+				<dl>
+					<dt>readAsText 参数：file,[encoding]</dt>
+					<dd>将文件读取为文本。其中第二个参数是文本的编码方式，默认值为UTF-8。读取的结果就是这个文本的文件中的内容。</dd>
+				</dl>
+			</li>
+			<li>
+				<dl>
+					<dt>readAsDataURL 参数：file</dt>
+					<dd>将文件读取为DataURL字符串，该方法事实上是将小文件以一种特殊格式的URL地址形式直接读入页面。
+			这里的小文件通常是指图像与html等格式的文件</dd>
+				</dl>
+			</li>
+			<li>
+				<dl>
+					<dt>abort 参数：(none)</dt>
+					<dd>中断读取操作</dd>
+				</dl>
+			</li>
+		</ol>
+	</section>
+
+	<section>
+		<h1>2. FileReader接口的事件</h1>
+		<ol>
+			<li>onabort: 数据读取中断时触发</li>
+			<li>onerror: 数据读取出错时触发</li>
+			<li>onloadstart: 数据读取开始时触发</li>
+			<li>onprogress: 数据读取中</li>
+			<li>onload: 数据读取成功完成时触发</li>
+			<li>onloadend: 数据读取完成时触发，无论成功或失败</li>
+		</ol>
+	</section>
+	<section>
+		<h1>3. FileReader接口的使用示例</h1>
+		<p>
+			<label>请选择一个文件：</label>
+			<input type="file" id="file_443"><br>
+			<input type="button" value="读取图像" onclick="readAsDataURL()">
+			<input type="button" value="读取二进制数据" onclick="readAsBinaryString()">
+			<input type="button" value="读取文本文件" onclick="readAsText()">
+		</p>
+		<div id="result_443">
+			<!-- 这里用来显示读取结果 -->
+		</div>
+		<div>
+			<p>
+				<label>请选择一个图像文件：</label>
+				<input type="file" id="file_4432"><br>
+				<input type="button" value="显示图像" onclick="readFile()">
+			</p>
+			<div id="result_4432">
+				<!-- 这里用来显示读取结果 -->
+			</div>
+		</div>
+	</section>
+</article>
+
+</body>
+</html>

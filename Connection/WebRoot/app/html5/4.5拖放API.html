@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>4.5拖放API</title>
+<style type="text/css">
+p{
+	text-indent: 2em;
+	line-height: 25px;
+}
+</style>
+<script type="text/javascript">
+function init() {
+	var source = document.getElementById("dragme");
+	var dest = document.getElementById("text");
+	//(1)拖放开始
+	source.addEventListener("dragstart",function(ev){
+		//向dataTransger对象追加数据
+		var dt = ev.dataTransfer;
+		dt.effectAllowed = 'all';
+		//(2)拖动元素为dt.setData();
+		dt.setData("text/plain","你好");
+	},false);
+	//(3)dragend： 拖放结束
+	dest.addEventListener("dragend",function(ev){
+		//不执行默认处理（拒绝被拖放）
+		ev.preventDefault();
+	},false);
+	//(4)drop：被拖放
+	dest.addEventListener("drop",function(ev){
+		//从DataTransfer对象哪里取得数据
+		var dt = ev.dataTransfer;
+		var text = dt.getData("text/plain");
+		dest.textContent += text;
+		//(5)不执行默认处理（拒绝被拖放）
+		ev.preventDefault();
+		//停止事件传播
+		ev.stopPropagation();
+	},false);
+}
+//(6)设置页面属性，不执行默认处理（拒绝被拖放）
+document.ondragover = function(e){e.preventDefault();};
+document.ondrop = function(e){e.preventDefault();};
+</script>
+</head>
+<body onload="init()">
+
+<article>
+	<h1>4.5.1 实现拖放的步骤</h1>
+	<ol>
+		<li>将想要拖放的对象元素的draggable属性设为true（draggable="true"）。这样才能将该元素进行拖放。另外，img元素与a元素（必须指定href）默认允许拖放。</li>
+		<li>编写与拖放有关的事件处理代码。</li>
+	</ol>
+	<table>
+		<tr>
+			<th>事件</th>
+			<th>产生事件的元素</th>
+			<th>描述</th>
+		</tr>
+		<tr>
+			<td>dragstart</td>
+			<td>被拖放的元素</td>
+			<td>开始拖放操作</td>
+		</tr>
+		<tr>
+			<td>drag</td>
+			<td>被拖放的元素</td>
+			<td>拖放过程中</td>
+		</tr>
+		<tr>
+			<td>dragenter</td>
+			<td>拖放过程中鼠标经过的元素</td>
+			<td>被拖放的元素开始进入本元素的范围内</td>
+		</tr>
+		<tr>
+			<td>dragover</td>
+			<td>拖放过程中鼠标经过的元素</td>
+			<td>被拖放的元素正在本元素范围内移动</td>
+		</tr>
+		<tr>
+			<td>dragleave</td>
+			<td>拖放过程中鼠标经过的元素</td>
+			<td>被拖放的元素离开本元素的范围</td>
+		</tr>
+		<tr>
+			<td>drop</td>
+			<td>拖放的目标元素</td>
+			<td>有其他元素被拖放到了本元素中</td>
+		</tr>
+		<tr>
+			<td>dragend</td>
+			<td>拖放的对象元素</td>
+			<td>拖放操作结束</td>
+		</tr>
+	</table>
+	<section>
+		<h1>简单拖放示例</h1>
+		<div id="dragme" draggable="true" style="width: 200px; border: 1px solid gray;">
+			请拖放
+		</div>
+		<div id="text" style="width: 200px; height: 200px; border: 1px solid gray;"></div>
+	</section>
+	<label>现在支持拖动出来的MIME的类型为一下几种：</label>
+	<ul>
+		<li>text/plain: 文本文字；</li>
+		<li>text/html: html文字；</li>
+		<li>text/xml: xml文字；</li>
+		<li>text/uri-list: url列表，每个url为一行。</li>
+	</ul>
+</article>
+<article>
+	<h1>4.5.2 DataTransfer对象的属性与方法</h1>
+	<p>如果DataTransger对象的属性和方法使用得好，可以实现定制拖放图标，让它只支持特定拖放（譬如拷贝/移动/）等，甚至可以实现
+	更复杂的拖放操作。</p>
+	<ol>
+		<li>dropEffect属性</li>
+		<li>effectAllowed属性</li>
+		<li>types属性</li>
+		<li>void clearData(DOMString format)</li>
+		<li>void setData(DOMString format，DOMString data)</li>
+		<li>DOMString getData(DOMString format)</li>
+		<li>void setDragImage(Element image,long x,longy)</li>
+	</ol>
+</article>
+<article>
+	<h1>4.5.3 设定拖放时的视觉效果</h1>
+	<p>dropEffect属性与effectAllowed属性结合起来可以设定拖放时的视觉效果。effectAllowed属性表示当一个元素被拖动时
+	所允许的视觉效果，一般在ondragstart事件中设定，允许设定的值为none、copy、copyLink、copyMove、link、linkMove、
+	move、all、unintialize。dropEffect属性表示实际拖放时的视觉效果，一般在ondragover事件中指定，允许设定的值为none、
+	copy、link、move。dropEffect属性所表示的实际视觉效果必须在effectAllowed属性所表示的允许视觉效果范围内。规则如下所示。</p>
+	<ol>
+		<li>如果effectAllowed属性设定为none，则不允许拖放元素。</li>
+		<li>如果dropEffect属性设定为none，则不允许被拖放到目标元素中。</li>
+		<li>如果effectAllowed属性设定为all或不设定，则dropEffect属性允许被设定为任何值，并且按指定的视觉效果进行显示。</li>
+		<li>如果effectAllowed属性设定为具体效果（不为none、all），dropEffect属性也设定了具体视觉效果，
+		则两个具体效果值必须完全相等，否则不允许将被拖放的元素放到目标元素中。</li>
+	</ol>
+	<p>以下是对effectAllowed属性及dropEffect属性进行设定的代码片段,完整代码参考上例</p>
+	<xmp>
+	source.addEventListener("dragstart",function(ev){
+		var dt = ev.dataTransfer;
+		//设定effectAllowed属性
+		dt.effectAllowed = 'copy';
+		dt.setData("text/plain","你好");
+	},false);
+	dest.addEventListener("dragover",function(ev){
+		var dt = ev.dataTransger;
+		//设定dropEffect属性
+		dt.dropEffect = 'copy';
+		ev.preventDefault();
+	},false);
+	</xmp>
+</article>
+<article>
+	<h1>4.5.4 自定义拖放图标</h1>
+	<p>除了上面所说的使用effectAllowed属性与dropEffect属性外，HTML5中还允许自定义拖放图标——指的是在鼠标拖动元素的过程中，
+	位于鼠标指针下部的小图标。</p>
+	<p>上面提到DataTransger对象有一个setDragImage方法，该方法有三个参数，第一个参数image设定为拖放图标的图标元素，第二个
+	参数x为拖放图标离鼠标指针的x轴方向的位移量，第三个参数y为拖放图标离鼠标指针的y轴方向的位移量。</p>
+	<p>以下是调用setDragImage方法的代码片段</p>
+	<xmp>
+	// 创建图标元素
+	var dragIcon = document.creatElement("img");
+	//设定图标来源
+	dragIcon.src = 'http://twivatar.org/twitter/mini';
+	source.addEventListener("dragstart",function(ev){
+		var dt = ev.dataTransfer;
+		//设定自定义图标
+		dt.setDragImage(dragIcon, -10, -10);
+		dt.setData("text/plain","你好");
+	},false);
+	</xmp>
+</article>
+</body>
+</html>

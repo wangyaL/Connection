@@ -81,11 +81,11 @@ function updateProgress(newValue) {
 	<h1>4.3.3 新增的mark元素</h1>
 	<p>需要突出显示的或高亮显示的
 	<p>&ensp;&ensp;在HTML4中，你可能已经习惯于用em元素或strong元素来突出显示文字，
-	<em>但请记住mark元素的作用与这两个元素的作用是有区别的</em>，不能混同使用。
-	<strong>mark</strong>元素的标识目的与原文作者无关，
+	但请记住mark元素的作用与这两个元素的作用是有区别的，不能混同使用。
+	<mark>mark</mark>元素的标识目的与原文作者无关，
 	或者说它不是原文作者用来标识文字的，而是在后来引用时添加上去的，它的目的是吸引当前用户的注意力，提供给用户作参考，
 	希望能够对用户有帮助。而<strong>strong</strong>是原文作者用来强调一段文字的重要性，譬如警告信息、错误信息等，
-	<strong>em</strong>元素是作者为了突出文章重点而使用的。
+	<em>em</em>元素是作者为了突出文章重点而使用的。
 	
 	<hr>
 	<h1>4.3.4 新增的progress元素</h1>
@@ -104,7 +104,7 @@ function updateProgress(newValue) {
 	<!-- 不是一定要使用属性 -->
 	<meter value="0.8">80%</meter>
 	<meter value="0.75">3/4</meter>
-	<p>在IE6/7/8中，需要在JavaScript脚本中添加如下代码，放可使用该元素。
+	<p>在IE6/7/8中，需要在JavaScript脚本中添加如下代码，方可使用该元素。
 	<xmp>
 	<!--[if IE]>
 	<script src="http://HTML5shiv.googlecode.com/svn/trunk/HTML5.js"></script> 
@@ -115,10 +115,10 @@ function updateProgress(newValue) {
 	<h1>4.3.7改良的ol元素</h1>
 	<h3>ol列表的start属性示例</h3>
 	<ol start="5">
-		<li>列表内容5</li>
-		<li>列表内容6</li>
-		<li>列表内容7</li>
-		<li>列表内容8</li>
+		<li>列表内容1</li>
+		<li>列表内容2</li>
+		<li>列表内容3</li>
+		<li>列表内容4</li>
 	</ol>
 
 	<hr>
@@ -159,7 +159,10 @@ function updateProgress(newValue) {
 	<hr>
 	<h1>4.3.10重定义的small元素</h1>
 	<article>
-		<p>在html5中，对small元素进行了重新定义，使其由
+		<p>在html5中，对small元素进行了重新定义，使其由原来的通用展示性元素变为更具体的、专门用来标识所谓“小字印刷体”的
+		元素，通常用在诸如免责声明、注意事项、<small>法律规定</small> 、与版权相关等的法律性声明文字中，同时不允许被应用在页面主内容中，只允许被
+		当做辅助信息用inline方式内嵌在页面上使用。同时，small元素也不意味着元素中内容字体会变小，如果需要将字体表笑，需要配
+		合着CSS样式表来使用。
 	</article>
 	
 </body>
