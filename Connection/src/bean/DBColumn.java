@@ -6,11 +6,11 @@ public class DBColumn {
 	private boolean nullable;
 	private int length;
 	private boolean unique;
-	private String defaultValue;//Ä¬ÈÏÖµ
-	private boolean primaryKey;//ÊÇ·ñÎªÖ÷¼ü
-	private int decimalDigits;//Ğ¡ÊıÎ»
-	private boolean autoIncrement;//×ÔÔö³¤
-	private String remarks;//×¢ÊÍ
+	private String defaultValue;//é»˜è®¤å€¼
+	private boolean primaryKey;//æ˜¯å¦ä¸ºä¸»é”®
+	private int decimalDigits;//å°æ•°ä½
+	private boolean autoIncrement;//è‡ªå¢é•¿
+	private String remarks;//æ³¨é‡Š
 	public String getName() {
 		return name;
 	}

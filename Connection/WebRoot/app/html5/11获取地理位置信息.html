@@ -4,8 +4,157 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <title>11获取地理位置信息</title>
+<style type="text/css">
+p{
+	text-indent: 2em;
+	line-height: 25px;
+}
+</style>
+<script type="text/javascript">
+function showObject(obj, k){
+	var show_obj = document.getElementById("map");
+	//递归显示object
+	var show_html = "";
+	if(!obj){return;}
+	for ( var i in obj) {
+		if(typeof(obj[i]) != "object" || obj[i] == null){
+			for (var j = 0; j < k; j++) {
+				document.write("&nbsp;&nbsp;&nbsp;&nbsp;");
+				//show_html += "&nbsp;&nbsp;&nbsp;&nbsp;";
+				//show_obj.write("&nbsp;&nbsp;&nbsp;&nbsp;");
+			}
+			document.write(i + ":" + obj[i] + "<br>");
+			//show_html += i + ":" + obj[i] + "<br>";
+			//show_obj.write(i + ":" + obj[i] + "<br>");
+		}else {
+			document.write(i + ":" + "<br>");
+			//show_html += i + ":" + "<br>";
+			//show_obj.write(i + ":" + "<br>");
+			showObject(obj[i], k+1);
+		}
+	}
+	//show_obj.innerHTML = show_html;
+}
+function get_location(){
+	if(navigator.geolocation)
+		navigator.geolocation.getCurrentPosition(show_map, handle_error, 
+				{enableHighAccuracy:true, maximumAge: 1000});
+	else
+		alert("你的浏览器不支持使用HTML5来获取地理位置信息。");
+}
+function handle_error(err){
+	console.log(err);
+	//错误处理
+	switch (err.code) {
+	case 1:
+		alert("位置服务被拒绝。");
+		break;
+	case 2:
+		alert("暂时获取不到位置信息。");
+		break;
+	case 3:
+		alert("获取信息超时。");
+		break;
+	default:
+		alert("位置错误。");
+		break;
+	}
+}
+function show_map(position) {
+	console.log(position);
+	//显示地理信息
+	var latitude = position.coords.latitude;
+	var longitude = position.coords.longitude;
+	showObject(position, 0);
+}
+//get_location();
+</script>
 </head>
 <body>
-
+<article>
+	<h1>11.1 Geolocation API的基础知识</h1>
+	<p>在HTML5中，为window.navigator对象新增了一个geolocation属性，可以使用Geolocation API来对该属性进行访问。
+	window.navigator对象的geolocation属性存在以下三个方法</p>
+	<section>
+		<h1>11.1.1 获取当前地址位置</h1>
+		void getCurrentPosition(onSuccess, onError, options);
+		第二、三个参数是可选属性。<br>
+		<p>第二个参数为获取当前地理位置信息失败时所执行的火电函数。该回调函数使用一个error对象作为参数，该对象具有以下连个属性：</p>
+		<ol>
+			<li>code属性：1（用户拒绝了位置服务），2（获取不到位置信息），3（获取信息超时错误）</li>
+			<li>message属性：错误信息</li>
+		</ol>
+		<p>第三个参数可以省略，它是一个可选属性的列表，这些可选属性如下：</p>
+		<ol>
+			<li>enableHighAccuracy: 是否要求高精度的地理位置信息，这个参数在很多设备上都没有，
+			因为使用在设备上时需要结合设备电量、具体地理情况综合考虑。因此，多数情况下把该属性设为默认，有设备自身来调整。</li>
+			<li>timeout： 对地理位置信息的获取操作做一个超时限制（单位为毫秒）。如果在该时间内未获取到地理位置信息，则返回错误。</li>
+			<li>maximumAge： 对地理位置信息进行缓存的有效时间（单位毫秒）。例如maximumAge: 120000(1分钟是60000)。
+			如果10点整的时候获取过一次地理位置信息，10:01的时候，再次调用navigator.geolocation.getCurrentPosition
+			重新获取地理位置信息，则返回的依然为10:00时的数据（因为设置的缓存有效时间为2分钟）。超过这个时间后缓存的地理位置信息被废弃，
+			尝试重新获取地理位置信息。如果该指被指定为0，则无条件重新获取新的地理位置信息。</li>
+		</ol>
+		<xmp>
+navigator.geolocation.getCurrentPosition(
+	function(position){
+		var coords = position.coords;
+		showMap(coords.latitude, coords.longtitude, coords.accuracy);
+	}, 
+	function(error){
+		var errorTypes ={
+				1: '位置服务被拒绝',
+				2: '获取不到位置信息',
+				3: '获取信息超时'
+		};
+		alert(errorTypes[error.code] + ":，不能确定你的当前地址位置");
+	}
+);
+navigator.geolocation.getCurrentPosition(
+	function(position){
+		//获取地理位置信息成功时所做处理
+	},
+	function(error){
+		//获取地理位置信息失败时所做处理
+	},
+	//以下是可选属性
+	{
+		//设置缓存有效时间为2分钟
+		maximumAge: 60*1000*2,
+		//5秒钟内未获取到地理位置信息则返回错误
+		timeout: 5000
+	}
+);
+		</xmp>
+	</section>
+	<section>
+		<h1>11.1.2 持续监视当前地理位置的信息</h1>
+		<p>使用watchPosition方法来持续获取用户的当前地理位置信息，它会定期地自动获取，该方法定义如下：</p>
+		int watchPosition(onSuccess, onError, option);
+		<p>该方法三个参数的说明与使用方法与getCurrentPosition方法的参数说明与使用方法相同。
+		该方法返回一个数字，这个数字的使用方法与JavaScript脚本中setInterval方法的返回参数的使用方法类似，
+		可以被clearWatch方法使用，停止对当前地理位置信息的监视。</p>
+	</section>
+	<section>
+		<h1>11.1.2 停止获取当前用户的地理位置信息</h1>
+		<p>该方法可以停止对当前用户的得力位置信息的监视。</p>
+		void clearWatch(watchId);
+		<p>该方法的参数为调用watchCurrentPosition方法监视地理位置信息时的返回参数。</p>
+	</section>
+</article>
+<article>
+	<h1>11.2 position对象</h1>
+	<ol>
+		<li>latitude: 纬度</li>
+		<li>longitude: 经度</li>
+		<li>altitude: 海拔高度（不能获取时为null）</li>
+		<li>accuracy: 获取到的纬度或经度的精度（单位米）</li>
+		<li>altitudeAccurncy: 海拔高度的精度（单位米）</li>
+		<li>heading: 设备的前进方向。用面朝正北方向的顺时针旋转角度来表示（不能获取时为null）</li>
+		<li>speed: 设备的前进速度（以米/秒为单位，不能获取时为null）</li>
+		<li>timestamp: 获取地理位置信息时的时间</li>
+	</ol>
+	<button onclick="get_location()">获取地理位置信息</button>
+	<div id="map" style="width: 400px; height: 400px"></div>
+</article>
 </body>
 </html>

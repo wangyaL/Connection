@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>10使用web-workers处理线程</title>
+
+<script type="text/javascript">
+//创建执行运算的线程
+var worker = new Worker("../../assets/html5/10SumCalculate.js");
+//接收从线程中传出的计算结果
+worker.onmessage = function(event){
+	//消息文本放置在data属性中，可以是任何JavasCript对象。
+	alert("合计算为"+event.data+".");
+};
+function calculate() {
+	var num = parseInt(document.getElementById("num").value, 10);
+	//将数值传给线程
+	worker.postMessage(num);
+}
+</script>
+</head>
+<body>
+<article>
+	<h1>从1到给定值的求和示例</h1>
+	输入数值：<input type="text" id="num">
+	<button onclick="calculate()">计算</button>
+</article>
+<a href="10.2与线程进行数据的交互.html">10.2与线程进行数据的交互.html</a>
+<a href="10.3线程嵌套.html">10.3线程嵌套.html</a>
+<article>
+	<h1>10.4 线程中可用的变量、函数与类</h1>
+	<p>最后，我们再来总体看一下在线程用的JavaScript加班文件中所有可用的变量、函数与类</p>
+	<dl>
+		<dt>1、self</dt>
+		<dd>self关键词用来表示本线程范围内的作用域</dd>
+		<dt>2、postMessage(message)</dt>
+		<dd>向创建线程的源窗口发送消息</dd>
+		<dt>3、onmessage</dt>
+		<dd>获取接收消息的时间句柄</dd>
+		<dt>4、importScripts(urls)</dt>
+		<dd>导入其他JavaScript脚本文件。参数为该脚本文件的URL地址，可以导入多个脚本文件。
+		如下所示。imorptScript('script1.js','scripts\script2.js','scripts\script3.js');<br>
+		导入的脚本文件必须与使用该线程文件的页面在同一个域中，并在同一个端口中。</dd>
+		<dt>5、navigator对象</dt>
+		<dd>与window.navigation对象类似，具有appName、platform、userAgent、appVersion这些属性</dd>
+		<dt>6、sessionStorage/localStorage</dt>
+		<dd>可以在线程中使用Web Storage</dd>
+		<dt>7、XMLHttpRequest</dt>
+		<dd>可以在线程中出来Ajax请求。</dd>
+		<dt>8、Web Workers</dt>
+		<dd>可以在线程中嵌套线程。</dd>
+		<dt>9、setTimeout()/setInterval()</dt>
+		<dd>可以在线程中实现定时处理。</dd>
+		<dt>10、close</dt>
+		<dd>可以结束本线程。</dd>
+		<dt>11、eval()、isNaN()、escape()等</dt>
+		<dd>可以使用所有JavaScript核心函数。</dd>
+		<dt>12、object</dt>
+		<dd>可以创建和使用本地对象。</dd>
+		<dt>13、WebSockets</dt>
+		<dd>可以使用WebSockets API来向服务器发送和接收消息。</dd>
+	</dl>
+</article>
+</body>
+</html>
