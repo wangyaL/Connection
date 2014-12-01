@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>7本地存储</title>
+
+<style type="text/css">
+p{
+	text-indent: 2em;
+	line-height: 25px;
+}
+</style>
+
+<script type="text/javascript">
+//sesseionStorage示例
+function saveStorage_s(id){
+	var target = document.getElementById(id);
+	var str = target.value;
+	sessionStorage.setItem("message", str);
+}
+function loadStorage_s(id){
+	var target = document.getElementById(id);
+	var msg = sessionStorage.getItem("message");
+	target.innerHTML = msg;
+}
+//localStorage示例
+function saveStorage_l(id){
+	var target = document.getElementById(id);
+	var str = target.value;
+	localStorage.setItem("message", str);
+}
+function loadStorage_l(id){
+	var target = document.getElementById(id);
+	var msg = localStorage.getItem("message");
+	target.innerHTML = msg;
+}
+</script>
+
+</head>
+<body>
+<article>
+	<h1>7.1.1 Web Storage是什么</h1>
+	<p>顾名思义，就是在web上存储数据的功能，而这里的存储，是针对客户端本地而言的。具体来说，Web Storage又分为两种:</p>
+	<p>1、sessionStorage: 将数据保存在session对象中。所谓的session，是指用户在浏览某个网站时，
+		从进入网站到浏览器关闭所经过的这段时间，也就是用户浏览这个网站所花费的时间。
+		session对象可以用来保存在这段时间内所要求保存的任何数据。</p>
+	<p>2、localStorage: 将数据保存在客户端本地的硬件设备（通常指硬盘，但也可以是其他硬件设备）中，
+		即使浏览器被关闭了，该数据仍然存在，下次打开浏览器访问网站时仍然可以继续使用。</p>
+	<p>这两者的区别在于，sessionStorage为临时保存，而localStorage为永久保存。</p>
+	<ul>
+		<li>sessionStorage:
+			<dl>
+				<dt>保存数据</dt>
+				<dd>sessionStorage.setItem(key, value)</dd>
+				<dt>读取数据</dt>
+				<dd>变量 = sessionStorage.getItem(key)</dd>
+			</dl>
+		</li>
+		<li>localStorage:
+			<dl>
+				<dt>保存数据</dt>
+				<dd>localStorage.setItem(key, value)</dd>
+				<dt>读取数据</dt>
+				<dd>变量 = localStorage.getItem(key)</dd>
+			</dl>
+		</li>
+	</ul>
+	<section>
+		<h1>Web Storage示例</h1>
+		<p id="msg"></p>
+		<input type="text" id="input"><br>
+		<input type="button" value="保存数据_session" onclick="saveStorage_s('input')">
+		<input type="button" value="读取数据_session" onclick="loadStorage_s('msg')"><br>
+		<input type="button" value="保存数据_local" onclick="saveStorage_l('input')">
+		<input type="button" value="读取数据_local" onclick="loadStorage_l('msg')">
+	</section>
+</article>
+
+</body>
+</html>
