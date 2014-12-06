@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 //创建执行运算的线程
-var worker = new Worker("../../assets/html5/10SumCalculate.js");
+var worker = new Worker("./js/10SumCalculate.js");
 //接收从线程中传出的计算结果
 worker.onmessage = function(event){
 	//消息文本放置在data属性中，可以是任何JavasCript对象。

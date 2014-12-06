@@ -4,12 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <title>4.4 文件API</title>
-<style type="text/css">
-p{
-	text-indent: 2em;
-	line-height: 25px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="../../css/html5/main.css">
 </head>
 <script type="text/javascript">
 
@@ -167,14 +162,14 @@ function readFile() {
 	<p>FileReader接口主要用来把文件读入内存，并且读取文件中的数据。FileReader接口提供了一个异步API，使用该API可以
 	在浏览器主线程中异步访问文件系统，读取文件中的数据。到目前为止，只有Firefox 3.6+和Google Chrom 6.0+实现了
 	FileReader接口。有一种方法可以检查您的浏览器是否对FileReader接口提供支持，如下所示。</p>
-<xmp>
-if (typeof FileReader == 'undefined'){
- alert("您的浏览器未实现FileReader接口");
-} else {
- var reader = new FileReader();
- //正常使用浏览器
-}
-</xmp>
+	<xmp>
+	if (typeof FileReader == 'undefined'){
+		alert("您的浏览器未实现FileReader接口");
+	} else {
+		var reader = new FileReader();
+		//正常使用浏览器
+	}
+	</xmp>
 	<section>
 		<h1>1. FileReader接口的方法</h1>
 		<p>FileReader接口拥有4个方法，其中3个用以读取文件，另一个用来江都去过程中断。下表列出了这些方法以及它们的参数和

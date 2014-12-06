@@ -17,7 +17,7 @@ for(var i=0; i<100; i++){
 	intStr += intArray[i];
 }
 //向后台线程提交随机数组
-var worker = new Worker("../../assets/html5/10.2script.js");
+var worker = new Worker("./js/10.2script.js");
 worker.postMessage(intStr);
 //从线程中取得计算结果
 worker.onmessage = function(event){

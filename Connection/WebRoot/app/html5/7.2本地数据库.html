@@ -5,13 +5,9 @@
 <meta name="viewport" content="width=device-width">
 <title>7.2 本地数据库</title>
 
-<style type="text/css">
-p{
-	text-indent: 2em;
-	line-height: 25px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="../../css/html5/main.css">
 
+<script type="text/javascript" src="./js/7.2script.js"></script>
 
 </head>
 <body>
@@ -21,25 +17,275 @@ p{
 		<li><a href="#7.2.2">7.2.2 用executeSql来执行查询</a></li>
 		<li><a href="#7.2.3">7.2.3 使用数据库实现Web留言本</a></li>
 		<li><a href="#7.2.4">7.2.4 transaction方法中的处理</a></li>
+		<li><a href="#7.2..">网络资源</a></li>
 	</ul>
 </header>
 <article id="7.2.1">
+	<h1>1 本地数据库的基本概念</h1>
 	<p>在HTML 5中，打打丰富了客户端本地可以存储的内容，添加了很多功能来将原来必须要保存在服务
 	上的数据转为保存在客户端本地，从而打打提高了Web应用程序的性能，减轻了服务器端的负担，使Web
 	时代重新回到了“客户端为重、服务器端为轻”的时代。</p>
 	<p>在这其中，一项非常重要的功能就是数据库的本地存储功能。在HTML5中内置了一个可以通过SQL语句
 	来访问的数据库。在HTML4中，数据库只能放在服务器端，只能通过服务器来访问数据库，但是在HTML5中 ，
 	可以就像访问本地文件那样轻松地对内置数据库进行直接访问了。</p>
-	<p>现在，像
+	<p>现在，像这种不需要存储在服务器上的，被称为“SQLLite”的文件型SQL数据库已经得到了很广泛的
+	利用，所以THML5中也采用了这种数据库来作为本地数据库。因此，如果先掌握了SQLLite数据库的基本
+	知识的话，接着再学习如何使用HTML5的数据库也就不困难了。</p>
+	<p>那么，要使用SQLLite数据库，应该怎样编写JavaScript脚本呢？总的来说，有两个必要的步骤。</p>
+	<ul>
+		<li>创建访问数据库的对象</li>
+		<li>使用事务处理</li>
+	</ul>
+	<p>首先，必须要是使用openDatabase方法来创建一个访问数据库的对象。该方法的使用方法如下所示。</p>
+	<xmp>
+	var db = openDatabase('mydb', '1.0', 'Test DB', 2*1024*1024);
+	</xmp>
+	<p>该方法使用四个参数，第一个参数为数据库名，第二个参数为版本号，第三个参数为数据库的描述，第四个参数为
+	数据库的大小。该方法返回创建后的数据库访问对象，如果该数据库不存在，则创建该数据库。</p>
+	<p>实际访问数据库的时候，还需要调用transaction方法，用来执行事务处理。使用书屋处理，可以防止在对象
+	数据库进行访问及执行有关操作的时候受到外界的打扰。因为在Web上，同时会有许多人都在对 页面进行访问。如果在
+	访问数据库的过程中，正在操作的数据被别的用户给修改掉的话，会引起很多意想不到的后果。因此，可以使用事务来达到
+	在操作完了之前，阻止别的用户方法数据库的目的。</p>
+	<p>transaction方法的使用方法如下所示。</p>
+	<xmp>
+	db.transaction(function (tx){
+	  var sql='CREATE TABLE IF NOT EXISTS LOGS (id unique, Log)';
+	  tx.executeSql(sql);
+	});
+	</xmp>
+	<p>transaction方法使用一个回调函数为参数。在这个函数中，执行方法数据库的语句。</p>
 </article>
+
 <article id="7.2.2">
-
+	<h1>2 用executeSql来执行查询</h1>
+	<p>接下来，我们来看一下在transaction的回调函数内，到底是怎样访问数据库的。这里，使用了
+	作为参数传递给回调函数的transaction对象的executeSql方法。</p>
+	<p>executeSql方法的完整定义如下所示。</p>
+	<xmp>
+	transaction.executeSql(sqlquery,[],dataHandler,errorHandler);
+	</xmp>
+	<p>该方法使用四个参数，第一个参数为需要执行的SQL语句。</p>
+	<p>第二个参数为SQL语句中所使用到的参数的数组。在executeSql方法中，将SQL语句中所要使用到
+	参数先用“？”代替，然后一次将这些参数组成数字放在第二个参数中，如下所示。</p>
+	<xmp>
+	var sql = "update people set age=? where name=?;";
+	transaction.executeSql(sql, [age, name]);
+	</xmp>
+	<p>第三个参数为执行sql语句成功时调用的回调函数。该回调函数的传递方法如下所示。</p>
+	<xmp>
+	fucntion dataHandler(transaction, results){
+		//执行SQL语句成功时的处理
+	}
+	</xmp>
+	<p>该回调函数使用两个参数，第一个参数为transaction对象，第二个参数为执行查询操作时
+	返回的查询到的结果数据集对象。</p>
+	<p>第四个参数为执行SQL语句出错时调用的回调函数，该回调函数的传递方法如下所示。</p>
+	<xmp>
+	fucntion errorHandler(transaction, errmsg){
+		//执行SQL语句出错时的处理
+	}
+	</xmp>
+	<p>该回调函数使用两个参数，第一个参数为transaction对象，第二个参数为执行发送错误时
+	的错误信息文字。</p>
+	<p>那么，我们来看一下，当执行查询操作时，如何从查询到的结果数据集中，依次把数据取出到页面上来，
+	最简单的方法是使用for语句循环。结果数据集对象有一个rows属性，其中保存了查询到的每条记录，记录
+	的条数可以用rows.length来获取。可以用for循环，用rows[index]或rows.Item（[index]）
+	的形式来依次取出每条数据。在JavaScript脚本中，一般采用rows[index]的形式。另外，在google 
+	Chrome 5浏览器中，不支持rows.Item（[index]）的形式。</p>
 </article>
+
 <article id="7.2.3">
+	<h1>3 使用数据库实现Web留言本</h1>
+	<p>接下来，让我们仍然用Web留言本作为示例，来看一下具体应该怎样对数据库进行一些简单的操作。虽然在第
+	7.1节中，我们已经介绍过了使用Web Storage，可以实现Web留言本的功能，但是在这里，我们来看一下怎
+	样利用数据库来实现同样的功能。</p>
+	<p>首先，我们来看一下这个示例的界面。界面中，存在一个用来输入姓名的文本框，一个输入留言用的文本框，
+	以及一个保存数据时用的按钮。在按钮下面放置了一个表格，保存数据后从数据库中重新取得所有数据，然后把数据
+	显示在这个表格中。</p>
+	<!-- 代码清单7-7 Web留言本 -->
+	<section>
+		<table>
+			<tr><td>姓名：</td><td><input id="name77"></td></tr>
+			<tr><td>留言：</td><td><input id="memo77"></td></tr>
+			<tr>
+				<td></td>
+				<td><input type="button" value="保存" onclick="saveData77()"></td>
+			</tr>
+		</table>
+		<hr>
+		<table id="datatable77"></table>
+		<p id="msg77"></p>
+	</section>
 
 </article>
-<article id="7.2.4">
 
+<article id="7.2.4">
+	<h1>4 transaction方法中的处理</h1>
+	<p>追加数据</p>
+	<p>在addData函数中的transaction方法中，使用了回调函数，如下所示。</p>
+	<xmp>
+	tx.executeSql('insert into MsgData values(?,?,?)',
+		[name, message, time],
+		function(tx, rs){...追加数据成功时执行的处理...},
+		function(tx, error){...追加数据失败时执行的处理...}
+		);
+	</xmp>
+	<p>在这里，使用了“insert into MsgData values(?,?,?)”这句SQL语句来追加数据，
+	同时使用了[name, message, time]数组来传入SQL语句中所需的参数。真正对数据库执行时的
+	SQL语句如下所示。</p>
+	<p>insert into MsgData values(name, message, time);</p>
+	<p>这条语句的作用是在数据库表中插入一条数据。</p>
+	<p>·创建数据表</p>
+	<p>请注意，如果已经存在了数据表，重复创建该数据表时会引发错误，所以前面必须要加上“if not exists”
+	条件判断语句。这样，当想创建的表在数据库中已经存在时，就不会重复创建了。
+	<p>·获取全部数据</p>
+
+</article>
+
+<article id="7.2..">
+	<h1>网络资源</h1>
+1、openDatabase：这个方法使用现有数据库或创建新数据库创建数据库对象。
+<br>
+2、transaction：这个方法允许我们根据情况控制事务提交或回滚。
+<br>
+3、executeSql：这个方法用于执行真实的SQL查询。
+<h3>第一步：打开连接并创建数据库</h3>
+<xmp>
+var dataBase = openDatabase("student", "1.0", "学生表", 1024 * 1024, 
+	function () { }
+);
+if (!dataBase) {
+	alert("数据库创建失败！");
+} else {
+	alert("数据库创建成功！");
+}
+</xmp>
+<p>解释一下openDatabase方法打开一个已经存在的数据库，如果数据库不存在，它还可以创建数据库。几个参数意义分别是：
+<br>
+1，数据库名称。<br>
+2，版本号 目前为1.0,不管他，写死就OK。<br>
+3，对数据库的描述。<br>
+4，设置数据的大小。<br>
+5，回调函数(可省略)。<br>
+初次调用时创建数据库，以后就是建立连接了。<br>
+创建的数据库就存在本地，路径如下：
+<xmp>
+C:\Users\Administrator\AppData\Local\Google\Chrome
+\User Data\Default\databases\http_localhost_* 。
+</xmp>
+<p>创建的是一个sqllite数据库，可以用SQLiteSpy打开文件，可以看到里面的数据。
+<p>SQLiteSpy是一个绿色软件，可以百度一下下载地址或SQLiteSpy官方下载：SQLiteSpy。
+
+<h3>第二步：创建数据表</h3>
+<xmp>
+this.createTable=function() {
+  dataBase.transaction( function(tx) {
+    tx.executeSql(
+      "create table if not exists stu (id REAL UNIQUE, name TEXT)", 
+      [], 
+      function(tx,result){ alert('创建stu表成功'); }, 
+      function(tx, error){
+         alert('创建stu表失败:' + error.message); 
+      });
+  });
+}
+</xmp>
+解释一下，<br>
+executeSql函数有四个参数，其意义分别是：<br>
+1）表示查询的字符串，使用的SQL语言是SQLite 3.6.19。（必选）<br>
+2）插入到查询中问号所在处的字符串数据。（可选）<br>
+3）成功时执行的回调函数。返回两个参数：tx和执行的结果。（可选）<br>
+4）一个失败时执行的回调函数。返回两个参数：tx和失败的错误信息。（可选）<br>
+
+<h3>第三步：执行增删改查</h3>
+1）添加数据：
+<xmp>
+this.insert = function () {
+	dataBase.transaction(function (tx) {
+		tx.executeSql(
+			"insert into stu (id, name) values(?, ?)",
+			[id, '徐明祥'],
+			function () { alert('添加数据成功'); },
+			function (tx, error) {
+				alert('添加数据失败: ' + error.message);
+				}
+		);
+	});
+});
+</xmp>
+ 2）查询数据
+<xmp>
+this.query = function () {
+	dataBase.transaction(function (tx) {
+		tx.executeSql(
+			"select * from stu", [],
+			function (tx, result) { //执行成功的回调函数
+			//在这里对result 做你想要做的事情吧...........
+			},
+			function (tx, error) {
+			alert('查询失败: ' + error.message);
+		} );
+	});
+}
+</xmp>
+
+<p>特别提醒
+<p>上面代码中执行成功的回调函数有一参数result。
+
+<p>result：查询出来的数据集。其数据类型为 SQLResultSet ，就如同C#中的DataTable。 
+<p>SQLResultSet 的定义为：
+<xmp>
+interface SQLResultSet {
+	readonly attribute long insertId;
+	readonly attribute long rowsAffected;
+	readonly attribute SQLResultSetRowList rows;
+};
+</xmp>
+
+<p>其中最重要的属性—SQLResultSetRowList 类型的 rows 是数据集的“行” 。 
+<p>rows 有两个属性：length、item 。
+<p>故，获取查询结果的第一行列名为name的值 ：result.rows.item(0).name  。
+
+3）更新数据
+<xmp>
+this.update = function (id, name) {
+	dataBase.transaction(function (tx) {
+		tx.executeSql(
+			"update stu set name = ? where id= ?",
+			[name, id],
+			function (tx, result) {
+			},
+			function (tx, error) {
+				alert('更新失败: ' + error.message);
+		});
+	});
+}
+</xmp>
+
+4）删除数据
+<xmp>
+this.del = function (id) {
+	dataBase.transaction(function (tx) {
+		tx.executeSql(
+			"delete from stu where id= ?",
+			[id],
+			function (tx, result) {
+			},
+			function (tx, error) {
+				alert('删除失败: ' + error.message);
+		});
+	});
+}
+</xmp>
+
+5）删除数据表
+<xmp>
+this.dropTable = function () {
+	dataBase.transaction(function (tx) {
+		tx.executeSql('drop table stu');
+	});
+}
+</xmp>
 </article>
 </body>
 </html>
