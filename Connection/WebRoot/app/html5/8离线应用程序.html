@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html manifest="./manifest/swapCache.manifest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>8 离线应用程序</title>
+<link rel="stylesheet" type="text/css" href="../../css/html5/main.css">
+<script type="text/javascript" src="./js/8script.js"></script>
+</head>
+<body>
+<header>
+	<ul>
+		<li><a href="#8.1">8.1 离线Web应用程序详解</a></li>
+		<li><a href="#8.1.1">8.1.1 新增的本地缓存</a></li>
+		<li><a href="#8.1.2">8.1.2 本地缓存与浏览器网页缓存的区别</a></li>
+		<li><a href="#8.2">8.2 manifest文件</a></li>
+		<li><a href="#8.3">8.3 浏览器与服务器的交互过程</a></li>
+		<li><a href="#8.4">8.4 applicationCache对象</a></li>
+		<li><a href="#8.4.1">8.4.1 swapCache方法</a></li>
+		<li><a href="#8.4.2">8.4.2 applicationCache对象的事件</a></li>
+	</ul>
+</header>
+
+<article id="8.1">
+	<h1>8.1 离线Web应用程序详解</h1>
+	<section id="8.1.1">
+		<h1>8.1.1 新增的本地缓存</h1>
+		<p>今天，Web应用程序已经变得越来越复杂，越来越成熟了，很多领域都在一用着Web应用程序。但是，
+		它有一个致命的缺点：如果用户没有和Internet建立连接，他就不能利用这个Web应用程序了。</p>
+		<p>因此，在HTML5中，新增了一个API，它使用一个本地缓存机制很好地解决了这个问题，为离线Web
+		应用程序的开发提供了可能性。</p>
+		<p>为了让Web应用程序在离线状态时候也能正常工作，就必须要把所有构成Web应用程序的资源文件，
+		诸如HTML文件、CSS文件、JavaScript脚本文件放在本地缓存中，当服务器没有和Internet建立
+		连接的时候，也可以利用本地缓存中的资源文件来正常运行Web应用程序。</p>
+	</section>
+	<section id="8.1.2">
+		<h1>8.1.2 本地缓存与浏览器网页缓存的区别</h1>
+		<p>Web应用程序的本地缓存与浏览器的网页缓存在许多方面都存在着明显的区别。</p>
+		<p>首先，本地缓存是为整个Web应用程序服务的，而浏览器的网页缓存只服务于单个网页。任何网页都具有
+		网页缓存，而本地缓存只缓存那些你指定缓存的网页。其次，网页缓存也是不安全、不可靠的，因为我们不知道
+		在网站中到底缓存了哪些网页，以及缓存了网页上的哪些资源。而本地缓存是可靠的，我们可以控制对哪些内容
+		进行缓存，不对哪些内容进行缓存，开发人员可以用编程的手段来控制缓存的更新，利用缓存对象的各种属性、
+		状态和事件来开发出更为强大的离线应用程序。</p>
+	</section>
+</article>
+
+<article id="8.2">
+	<h1>8.2 manifest文件</h1>
+	<p>Web应用程序的本地缓存是通过每个页面的manifest文件来管理的。manifest文件是一个简单文本文件，
+	在该文件中以清单的形式例举了需要被缓存的资源文件的文件名称，已经这些资源文件的访问路径。你可以为每一个页面
+	单独指定一个manifest文件，也可以对整个Web应用程序指定一个总的manifest文件。代码清单8-1为manifest
+	文件的一个示例，该文件为hello.html网页的manifest文件，我们用这个示例来对manifest文件做一个详细介绍。</p>
+	<strong>代码清单8-1 manifest文件示例</strong>
+	<xmp>
+	CACHE MANIFEST
+	#文件的开头必须要书写CACHE MANIFEST
+	#这个manifest文件的版本号
+	#version 7
+	CACHE
+	other.html
+	hello.js
+	images/myphoto.jpg
+	NETWORK:
+	http://Lulingniu/NotOffline
+	NotOffline.asp
+	*
+	FALLBACK:
+	online.js locale.js
+	CACHE:
+	newhello.html
+	newhello.js
+	</xmp>
+	<p>在manifest文件中，第一行必须是“CACHE MANIFEST”文字，以把文本文件的作用告知给浏览器，即对本地缓存中的
+	资源文件进行具体设置。同时，真正运行或测试离线Web应用程序的时候，需要对服务器进行配置，让服务器支持text/cache-manifest
+	这个MIME类型（在HTML5中规定manifest文件的MIME类型是text/cache-manifest）。例如对Apache服务器
+	进行配置的时候，需要找到<span style="color: red">{apache_home}/conf/mime.types</span>这个文件，并在文件最后添加如下所示的一行代码。</p>
+	<xmp>
+	text/cache-manifest  manifest
+	</xmp>
+	<p>在微软的IIS服务器中的步骤如下所示。</p>
+	<p>1)右键选择默认网站或需要添加类型的网站，弹出属性对话框。
+	<p>2)选择“HTTP头”标签。
+	<p>3)在MIME映射下，单击文件类型按钮。
+	<p>4)在打开的MIME类型对话框中单击新建按钮。
+	<p>5)在关联扩展名文本框中输入“manifest”，在内容类型文本框中输入“text/cache-manifest”，然后单击确定按钮。
+	<p>在manifest文件中，可以加上注释来进行一些必要的说明或解释，注释行以“#”文字开头。</p>
+	<p>在manifest文件中可以（而却最后）加上一个版本号，以表示这个manifest文件的版本。版本号可以是任何形式，
+	譬如上面的“version 201011211108”，更新manifest文件的时候一般也会对这个版本号进行更新。</p>
+	<p>接下来，指定资源文件，文件路径可以是相对路径，也可以是绝对路径。指定时每个资源文件为一行。</p>
+	<p>在指定资源文件的时候，可以把资源文件分为三类，分别是CACHE、NETWORK、FALLBACK。</p>
+	<section>
+		<p>·在CACHE类别中指定需要被缓存在本地的资源文件。为某个页面指定需要本地缓存的资源文件时，
+		不需要把这个页面本身知道在CACHE类别中，因为如果一个页面具有manifest文件，浏览器会自动
+		对这个页面进行本地缓存。</p>
+		<p>·NETWORK类别为显示指定不进行本地缓存的资源文件，这些资源文件只有当客户端与服务器端建立
+		连接的时候才能访问。本示例该类别中的“*”为通配符，表示没有在本manifest文件中指定的资源文件
+		都不进行本地缓存。</p>
+		<p>·FALLBACK类别中的每行中知道两个资源文件，第一个资源文件为能够在线访问时使用的资源文件，
+		第二个资源文件为不能在线访问时使用的备用资源文件。</p>
+	</section>
+	<p>每个类别都是可选的。但是如果文件开头没有指定类别而直接书写资源文件的时候，浏览器把这些资源文件视为
+	CACHE类别，直到文件中第一个被书写出来的类别为止。例如，代码清单8-2中，浏览器会把NETWORK类别之前
+	的文件都视为CACHE类别。</p>
+	<strong>代码清单8-2 省略CACHE类别示例</strong>
+	<xmp>
+	CACHE MANIFEST
+	#此处没有写明CACHE类别
+	other.html
+	hello.js
+	images/myphoto.jpg
+	NETWORK
+	http://Lulingniu/NotOffline
+	NotOffline.asp
+	</xmp>
+	<p>允许在同一个manifest文件中重复书写同一个类别，如代码清单8-3所示。</p>
+	<strong>代码清单8-3 允许重复书写同一类别</strong>
+	<xmp>
+	CACHE MANIFEST
+	CACHE
+	other.html
+	hello.js
+	NETWORK
+	http://Lulingniu/NotOffline
+	NotOffline.asp
+	#追加CACHE类别中的内容
+	CACHE
+	images/myphoto.jpg
+	</xmp>
+	<p>为了让浏览器能够正常阅读该文本文件，需要在Web应用程序页面上的html标签的manifest
+	属性中指定manifest文件的URL地址。指定方法如下所示。</p>
+	<xmp>
+	<!-- 你可以为每个页面单独指定一个manifest文件 -->
+	<html manifest="hello.manifest">
+	...
+	</html>
+	<!-- 你也可以为整个Web应用程序指定一个总的manifest文件 -->
+	<html manifest="global.manifest">
+	...
+	</html>
+	</xmp>
+	<p>通过这些步骤，将资源文件保存到本地缓存区的基本操作就完成了。当要对本地缓存区的内容进行修改时，
+	只要修改manifest文件就可以了。文件被修改后，浏览器可以自动检查manifest文件，并自动更新本地
+	缓存区中的内容。</p>
+</article>
+
+<article id="8.3">
+	<h1>8.3 浏览器与服务器的交互过程</h1>
+	<p>当使用离线Web应用程序进行工作的时候，有必要理解一下浏览器与服务器之间的交互过程。譬如一个
+	http://Lulingniu网站，以index.html为主页，该主页使用index.manifest文件为manifest
+	文件，在该文件中请求本地缓存index.html、hello.js、hello1.jpg、hello2.jpg这几个资源文件。
+	首次访问http://Lulingniu网站时，它们的交互过程如下所示。</p>
+	<ol>
+		<li>浏览器请求访问http://Lulingniu。</li>
+		<li>服务器返回index.html网页。</li>
+		<li>浏览器解析index.html网页，请求页面上所有资源文件，包括HTML文件、图像文件、CSS文件、JavaScript脚本文件，
+			以及manifest文件。</li>
+		<li>服务器返回所有资源文件。</li>
+		<li>浏览器处理manifest文件，请求manifest中所有要求本地缓存的文件，
+			包括index.html页面本身，即使刚才已经请求过这些文件。
+			如果你要求本地缓存所有文件，这将是一个比较大的重复的请求过程。</li>
+		<li>服务器返回所有要求本地缓存的文件。</li>
+		<li>浏览器对本地缓存进行更新，存入包含页面本身在内的所有要求本地缓存的资源文件，并触发一个事件，通知本地缓存被更新。</li>
+	</ol>
+	<p>现在浏览器已经把本地缓存更新完毕。如果再次打开浏览器访问http://Lulingniu网站，而且manifest文件没有被修改过，
+	它们的交互过程如下所示。</p>
+	<ol>
+		<li>浏览器再次请求访问http://Lulingniu.</li>
+		<li>浏览器发现这个页面被本地缓存，于是使用本地缓存中index.html页面。</li>
+		<li>浏览器解析index.html页面，使用所有本地缓存中的资源文件。</li>
+		<li>浏览器向服务器请求manifest文件。</li>
+		<li>服务器返回一个304代码，通知浏览器manifest没有发生变化。</li>
+	</ol>
+	<p>只要再次打开浏览器时manifest文件已经被更新过了，那么浏览器与服务器之间的交互过程如下所示。</p>
+	<ol>
+		<li>浏览器再次请求访问http://Lulingniu.</li>
+		<li>浏览器发现这个 页面被本地缓存，于是使用本地缓存中index.html页面。</li>
+		<li>浏览器解析index.html页面，使用所有本地缓存中的资源文件。</li>
+		<li>浏览器向服务器请求manifest文件。</li>
+		<li>服务器放回更新过的manifest文件。</li>
+		<li>浏览器处理manifest文件，发现该文件已被更新，于是请求所有要求进行本地缓存的资源文件，
+		包括index.html页面本身。</li>
+		<li>浏览器返回要求进行本地缓存的资源文件。</li>
+		<li>浏览器对本地缓存进行更新，存入所有新的资源文件。并且触发一个事件，通知本地缓存被更新。</li>
+	</ol>
+	<p>需要注意的是，即使资源文件被修改过了，在上面的第3节中已经装入的资源文件是不会发生变化的，
+	譬如图片不会突然变成新的图片，脚本文件也不会突然使用新的脚本文件，也就是说，这时更新过后的本地
+	缓存中的内容还不能被使用，只有重新打开这个页面的时候才会使用更新过后的资源文件。另外，如果你不想
+	修改manifest文件中对于资源文件的设置，但是你对服务器上请求缓存的资源文件进行了修改，那么你可以
+	通过修改版本号的方式来让浏览器认为manifest文件已经被更新过了，以便重新下载修改过的资源文件。</p>
+	<p>在下一节中，让我们来看一下怎样利用applicationCache对象手工进行本地缓存的更新。</p>
+</article>
+
+<article id="8.4">
+	<h1>8.4 applicationCache对象</h1>
+	<section>
+		<p>applicationCache对象代表了本地缓存，可以用它来通知用户本地缓存中已经被更新，
+		也允许用户手工更新本地缓存。</p>
+		<p>在前面讲到的浏览器与服务器的交互过程中，当浏览器对本地缓存进行更新，装入新的资源文件时，
+		会触发applicationCache对象的updateready事件，通知本地缓存已被更新。你可以利用
+		这个事件告诉用户本地缓存已经被更新，用户需要手工刷新页面来得到最新版本的应用程序。这部分代码
+		如下所示。</p>
+	<xmp>
+	applicationCache.onUpdateReady = funciton(){
+	//本地缓存已被更新，通知用户
+	alert("本地缓存已被更新，您可以刷新页面来得到本程序的最新版本。");
+	}
+	</xmp>
+		<p>另外，你可以通过applicationCache的swapCache方法来控制如何进行本地缓存的更新及更新的时机。</p>
+	</section>
+	<section id="8.4.1">
+		<h1>8.4.1 swapCache方法</h1>
+		<p>swapCache方法用来手工执行本地缓存的更新，它只能在applicationCache对象的updateReady事件被
+		触发时调用，updateReady事件只有在服务器上的manifest文件被更新，并且把manifest文件中所要求的资源文件
+		下载到本地后触发。顾名思义，这个事件的含义是“本地缓存准备更新”。当这个事件被触发后，我们可以用swapCache方法
+		来手工进行本地缓存的更新。下面，我们来看一下哪些场合需要使用到这个方法。</p>
+		<p>首先，如果本地缓存的容量非常大（譬如超过100MB），本地缓存的更新工作将需要相对较长时间，而且还会把浏览器给
+		锁住。这时最好有一个提示，告诉用户正在进行本地缓存的更新，该部分代码如下所示。</p>
+	<xmp>
+	applicationCache.onUpdateReady = function(){
+	//本地缓存已被更新，通知用户
+	alert("正在更新本地缓存....");
+	applicationCache.swapCache();
+	alert("本地缓存已被更新，您可以刷新页面来得到本程序的最新版本。");
+	}
+	</xmp>
+		<p>这时，让我们来考虑一个问题，在上面的代码中，如果不调用swapCache方法会怎么样？本地缓存就不会更新了吗？
+		回答是否定的，但是，更新的事件不一样。如果不调用swapCache方法，本地缓存将在下一次打开本页面时被更新；如果
+		调用swapCache方法的话，本地缓存将会被立刻更新。因此，你可以使用confirm方法让用户自己选择更新的时机——
+		是立刻更新，还是在下次打开画面时更新，特别是当他们有可以正在页面上执行一个较大的操作的时候。</p>
+		<p>另外，尽管使用swapCache方法立刻更新了本地缓存，但是并意味这我们页面上的图像和脚本文件也会被立刻更新，
+		它们都是在重新打开本页面时才会生效。</p>
+		<p>接下来，我们看一下完整的使用swapCache方法的示例。在该示例中，使用到了applicationCache对象的另
+		一个方法applicationCache.update，该方法的作用是检查服务器上的manifest文件是否有更新。在打开画面
+		时设定每5秒钟执行一次该方法，检查服务器上的manifest文件是否有更新。如果有更新，浏览器会自动洗澡manifest
+		文件中所有请求本地缓存的资源文件，当这些资源文件下载完毕时，会触发updateReady事件，询问用户是否立刻刷新页面
+		以使用最新版本的应用程序，如果用户选择立刻刷新，则调用swapCache方法手工更新本地缓存，更新完毕后刷新页面。</p>
+		<strong>swapCache方法示例</strong>
+	</section>
+	<section id="8.4.2">
+		<h1>8.4.2 applicationCache对象的事件</h1>
+		<p>applicationCache对象除了具有update方法与swapCache方法之外，还具有一系列的事件，现在我们对前面讲过
+		的浏览器与服务器的交互过程的内容进行扩充，看看在这个过程里这些事件是如何触发的。</p>
+		<p>首次访问http://Lulingniu网站：</p>
+		<ol>
+			<li>浏览器请求访问http://Lulingniu。
+			<li>服务器返回index.html网页。
+			<li>浏览器发现该网页具有manifest属性，触发checking事件，检查manifest文件是否存在。
+			不存在时，触发error事件，表示manifest文件未找到，不执行步骤6开始的交互过程。
+			<li>浏览器解析index.html网页，请求页面上所有资源文件。
+			<li>服务器返回所有资源文件。
+			<li>浏览器处理manifest文件，请求manifest中所有要求本地缓存的文件，包括index.html页面本身，
+			即使刚才请求过该文件。如果你要求本地缓存所有文件，这将是一个比较大的重复的请求过程。
+			<li>服务器返回所有要求本地缓存的文件。
+			<li>浏览器触发downloading事件，然后开始下载这些资源。在下载的同时，周期性地触发progress事件，
+			开发人员可以用编程的手段获取多少文件已被下载，多少文件仍然处于下载队列等信息。
+			<li>下载结束后触发cached事件，表示首次缓存成功，存入所有要求本地缓存的资源文件。
+		</ol>
+		<p>再次访问http://Lulingniu网站，步骤1~5同上，在步骤5执行玩之后，浏览器将核对manifest文件是否被更新，
+		若没哟被更新，触发noupdate事件，步骤6开始的交互过程不会被执行。如果被更新了，将继续执行后面的的步骤，在步骤9中
+		不触发cached事件，而是触发updateready事件，这表示下载结束，可以通过刷新页面来使用更新后的本地缓存，或调用
+		swapCache方法来立刻使用更新后的本地缓存。</p>
+		<p>另外，在访问缓存名单时如果返回一个HTTP404错误（页面未找到），或者410错误（永久消失），则触发obsolete事件。</p>
+		<p>在整个过程中，如果任何与本地缓存有关的处理中发生错误的话，都会触发error事件。可能会触发error事件的情况分为一下几种。</p>
+		<ul>
+			<li>缓存名单返回一个HTTP404错误（页面未找到），或者410错误（永久消失）。
+			<li>缓存名单被找到且没有更改，但引用缓存名单的HTML页面不能正确下载。
+			<li>缓存名单被找到且被更改，但浏览器不能下载某个缓存名单中列出的资源。
+			<li>开始更新本地缓存时，缓存名单再次被更改。
+		</ul>
+		<p>为了说明这个事件流程，我们在代码清单8-7中，将浏览器与服务器交互过程中所触发的一系列事件用文字的形式显示在页面上，
+		从这个页面中我们可以看出这些事件发生的先后顺序。</p>
+		<ul>
+			<li>首次打开网页——checking, downloading, progress, progress, cached
+			<li>再次打开网页（且manifest文件没有更新时）——noupdate
+			<li>再次打开网页（且manifest文件已更新时）——downloading, progress, progress, updateready
+		</ul>
+		<strong>applicationCache事件流程示例</strong>
+		<div id="msg87"></div>
+	</section>
+</article>
+</body>
+</html>
