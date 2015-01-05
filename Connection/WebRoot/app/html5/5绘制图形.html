@@ -6,9 +6,24 @@
 <title>5绘制图形</title>
 <link rel="stylesheet" type="text/css" href="../../css/html5/main.css">
 <script type="text/javascript" src="./js/5script.js"></script>
+<style type="text/css">
+div{
+	float: left;
+	text-align: center;
+}
+article a{
+	color: blue; /* 设置文字颜色 */
+	text-decoration: none; /* 去掉下划线 */
+}
+article a:hover{
+	/* background: #2E7AAD; */
+	color: red;
+	/* font-weight: bold; */
+}
+</style>
 </head>
 <body>
-<header>
+<header style="display: none;">
 	<ul>
 		<li><a href="#5.1">5.1 canvas元素的基础知识</a></li>
 		<li><a href="#5.1.1">5.1.1 在页面中放置canvas元素</a></li>
@@ -41,15 +56,15 @@
 </header>
 <article id="5.1.2">
 	<h1>5.1.2绘制矩形</h1>
-	<canvas id="canvas51" width="400" height="300"></canvas>
+	<a href="#canvas_div52">代码清单5-2 绘制矩形</a>
 </article>
 <article id="5.2.1">
 	<h1>5.2.1绘制圆形</h1>
-	<canvas id="canvas521" width="400" height="300"></canvas>
+	<a href="#canvas_div53">代码清单5-3 绘制圆形</a>
 </article>
 <article id="5.2.2">
 	<h1>5.2.2 重叠绘制</h1>
-	<canvas id="canvas522" width="400" height="300"></canvas>
+	<a href="#canvas_div54">代码清单5-4 重叠绘制</a>
 </article>
 <article id="5.2.3">
 	<h1>5.2.3 moveTo与lineTo绘制复杂图形</h1>
@@ -58,8 +73,136 @@
 		<li>moveTo(x,y) 绘制直线的时候以这个坐标点为起点。
 		<li>lineTo(x,y) lineTo方法在moveTo方法中指定的直线起点与参数中指定的直线终点之间绘制一条直线。
 	</ul>
-	<canvas id="canvas523" width="400" height="300"></canvas>
+	<a href="#canvas_div55">代码清单5-5 绘制复杂图形</a>
 </article>
+<article id="5.2.4">
+	<h1>5.2.4 使用bezierCurveTo绘制贝济埃曲线</h1>
+	<a href="#canvas_div56">代码清单5-6 绘制贝济埃曲线</a>
+</article>
+<article id="5.3.1">
+	<h1>5.3.1 绘制线性渐变</h1>
+	<a href="#canvas_div57">代码清单5-7 绘制线性渐变</a>
+</article>
+<article id="5.3.2">
+	<h1>5.3.2 绘制径向渐变</h1>
+	<a href="#canvas_div58">代码清单5-8 绘制径向渐变</a>
+</article>
+<article id="5.4">
+	<h1>5.4绘制变形图形</h1>
+	<section id="5.4.1">
+		<h1>5.4.1 坐标变换</h1>
+		<a href="#canvas_div59">代码清单5-9 坐标变换</a>
+		<p>绘制图形的时候，我们可能经常会想要旋转图形，或者对图形使用变形处理，使用Canvas API的坐标轴变换处理功能，可以实现这种效果。
+		<p>在计算机上绘制图形的时候，是以坐标单位为基准来进行图形绘制的。默认情况下，Canvas画布的最左上角对应于坐标轴原点（0，0）。
+		前面我们所讲的所有利用Canvas API绘制出来的图形都是以画布的最左上角为坐标轴原点，并以一个像素为一个坐标单位来进行绘制的。
+		<p>如果对这个坐标使用变换处理，就可以实现图形的变形处理了。对坐标的的变换处理，有一下三种方式：
+		<p><strong>平移</strong>
+		<p>使用图形上下文对象的translate方法移动坐标轴原点。
+	<xmp>
+	context.translate(x, y);
+	</xmp>
+		<p>x表示将坐标轴原点向左移动多少个单位，默认情况下为像素；y表示将坐标轴原点向下移动多少个单位。
+		<p><strong>扩大</strong>
+		<p>使用图形上下文对象的scale方法将图形放大。
+	<xmp>
+	context.scale(x, y);
+	</xmp>
+		<p>x是水平方向的放大倍数，y是垂直方向的放大倍数。将图形缩小的时候，将这两个参数设为0到1之间的小数就可以了，譬如0.5是指将图形缩小一半。
+		<p><strong>旋转</strong>
+		<p>使用图形上下文对象的rotate方法将图形进行旋转。
+	<xmp>
+	context.rotate(angle);
+	</xmp>
+		<p>rotate方法接受一个参数angle，angle是指旋转的角度，旋转的中心点是坐标轴的原点。
+		旋转是以顺时针方向进行的，要想逆时针旋转时，将angle设定为复数就可以了。
+	</section>
+	<section id="5.4.2">
+		<h1>5.4.2 坐标变换与路径的结合使用</h1>
+		<a href="#canvas_div510">代码清单5-10 坐标变换与路径结合使用</a>
+		<p>如果要对矩形进行变形，使用坐标变换就足够了。但是对使用路径绘制出来的图形进行变换的时候，要考虑的事情就比较多了。
+		因为使用了坐标变换之后，已经创建好的路径就不能用了。必须要重新创建路径。重新创建好路径之后，坐标变换方法又失效了。
+		<p>那么怎么办呢？必须先另外写一个创建路径的函数，然后在坐标变换的同时调用该函数，这样才能解决这个问题。
+		在代码清单5-10中，我们给出一个将坐标变换与路径结合使用的示例。执行该示例代码，可以绘制一个将五角星一边旋转一边缩小的图形。
+		<p>在示例中，首先单独书写一个create5Star的函数，在函数中创建了一个五角星的路径。
+		然后在draw函数中的for循环中，首先一次执行translate、scale、rotate方法，然后指向create5Star函数创建路径，
+		最后执行fill填充。
+		<p>在create5Star函数中，只创建了一个五角星，因为坐标轴变换，在Cancas画布中，此五角星会一边缩小一边旋转，
+		之后产生一个新的五角星，新的五角星又采用同样的方法进行绘制，最终绘制出来一连串具有变形效果的五角星的图形。
+	</section>
+	<section id="5.4.3">
+		<h1>5.4.3 矩阵变换</h1>
+		<a href="#canvas_div511">代码清单5-11 用transform方法实现变形</a>
+		<a href="#canvas_div512">代码清单2-12 使用setTransform方法绘制变形图形</a>
+	</section>
+</article>
+
+<article id="">
+	<h1></h1>
+	<a href="#canvas_div"></a>
+</article>
+
+
+<div id="canvas_div52">
+	<canvas id="canvas52" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-2 绘制矩形</span>
+</div>
+<div id="canvas_div53">
+	<canvas id="canvas53" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-3 绘制圆形</span>
+</div>
+<div id="canvas_div54">
+	<canvas id="canvas54" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-4 重叠绘制</span>
+</div>
+<div id="canvas_div55">
+	<canvas id="canvas55" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-5 绘制复杂图形</span>
+</div>
+<div id="canvas_div56">
+	<canvas id="canvas56" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-6 绘制贝济埃曲线</span>
+</div>
+<div id="canvas_div57">
+	<canvas id="canvas57" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-7 绘制线性渐变</span>
+</div>
+<div id="canvas_div58">
+	<canvas id="canvas58" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-8 绘制径向渐变</span>
+</div>
+<div id="canvas_div59">
+	<canvas id="canvas59" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-9 坐标变换</span>
+</div>
+<div id="canvas_div510">
+	<canvas id="canvas510" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-10 坐标变换与路径结合使用</span>
+</div>
+<div id="canvas_div511">
+	<canvas id="canvas511" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单5-11 用transform方法实现变形</span>
+</div>
+<div id="canvas_div512">
+	<canvas id="canvas512" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单2-12 使用setTransform方法绘制变形图形</span>
+</div>
+
+<div id="canvas_div5">
+	<canvas id="canvas5" width="400" height="300"></canvas>
+	<br>
+	<span></span>
+</div>
 
 </body>
 </html>
