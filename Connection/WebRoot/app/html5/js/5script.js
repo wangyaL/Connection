@@ -10,6 +10,7 @@ window.onload = function() {
 	draw510("canvas510");
 	draw511("canvas511");
 	draw512("canvas512");
+	draw513("canvas513");
 };
 /**
  * 代码清单5-2 绘制矩形的脚本文件
@@ -350,5 +351,57 @@ function draw512(id){
 	/* 绘制图形 */
 	context.strokeStyle = "gray";
 	context.strokeRect(30,10,60,20);
+}
+/**
+ * 代码清单2-13 图形组合
+ */
+function draw513(id){
+	var canvas = document.getElementById(id);
+	if(canvas == null){
+		return false;
+	}
+	var context = canvas.getContext('2d');
+	var oprtns = new Array("source-atop","source-in",
+			"source-out","source-over",
+			"destination-atop","destination-in",
+			"destination-out","destination-over",
+			"lighter","copy","xor");
+	i = 8;
+//	//绘制原有图形（蓝色长方形）
+//	context.fillStyle = "blue";
+//	context.fillRect(10,10,60,60);
+//	//设置组合方式，从组合的参数数组中挑选组合方法，此处因为i是8，所以选择oprtns数组中第9个组合方式lighter
+//	context.globalCompositeOperation = oprtns[i];
+//	//设置新图形（红色圆形）
+//	context.beginPath();
+//	context.fillStyle = "red";
+//	context.arc(60,60,30,0,Math.PI*2, false);
+//	context.fill();
+	
+	var dx = 0;
+	var dy = 0;
+	var n = 0;
+	for(var i=0; i<oprtns.length; i++){
+		if(i%1==0){
+			dx += 90;
+		}else if(i&2==0){
+			dx += 2*90;
+		}else if(i%3==0){
+			dx += 3*90;
+		}
+		if(i%4==0){
+			dy += n*90;
+			dx = 0;
+			n = 1;
+		}
+		
+		context.beginPath();
+		context.fillStyle = "blue";
+		context.fillRect(10+dx,10+dy,60,60);
+//		context.globalCompositeOperation = oprtns[i];
+//		context.fillStyle = "red";
+//		context.arc(60+dx,60+dy,30,0,Math.PI*2, false);
+		context.fill();
+	}
 }
 

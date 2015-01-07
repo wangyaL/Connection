@@ -131,9 +131,72 @@ article a:hover{
 	</section>
 	<section id="5.4.3">
 		<h1>5.4.3 矩阵变换</h1>
+		<xmp>
+	context.transform(m11,m12,m21,m22,dx,dy);
+		</xmp>
 		<a href="#canvas_div511">代码清单5-11 用transform方法实现变形</a>
+		<p>translate(x,y)  可以使用context.transform(1,0,0,1,x,y)或context.transform(0,1,1,0,x,y)方法进行代替，
+		前面四个参数1,0,0,1或0,1,1,0表示不对图形进行缩放操作，变形操作，
+		将dx设为x表示将坐标原点向右移动x个单位，dy设为y表示将坐标原点向下移动y个单位。
+		<p>scale(x,y)  可以使用context.transform(x,0,0,y,0,0)或context.transform(0,y,x,0,0,0)方法代替，
+		前面四个参数x,0,0,y或0,y,x,0表示将图标横向扩大x倍，纵向扩大y倍。dx,dy为0表示不移动坐标原点。
+		<p>rotate(angle)  替换方法如下所示。
+		<xmp>
+		context.transform(Math.cos(angle*Math.PI/180),
+			Math.sin(angle*Math.PI/180),
+			-Math.sin(angle*Math.PI/180),
+			Math.cos(angle*Math.PI/180), 0,0);
+		或
+		context.transform(-Math.sin(angle*Math.PI/180),
+			Math.cos(angle*Math.PI/180),
+			Math.cos(angle*Math.PI/180),
+			Math.sin(angle*Math.PI/180), 0,0);
+		</xmp>
+		<p>使用了transform方法后，接下来要绘制的图形都会按照移动后的坐标原点与新的变换矩阵相结合的方法进行绘制，
+		必要时可以使用setTransform方法将变换矩阵进行重置，setTransform方法的定义如下所示。
+		<xmp>
+		context.setTransform(m11,m12,m21,m22,dx,dy);
+		</xmp>
 		<a href="#canvas_div512">代码清单2-12 使用setTransform方法绘制变形图形</a>
+		<p>setTransform方法的参数及参数的用法与transform相同，事实上，该方法的作用为将画布上的最坐上角重置为坐标原点，
+		当图形上下文创建完毕时将所创建的初始变换矩阵设置为当前变换矩阵，然后使用transform方法。
+		<p>
 	</section>
+</article>
+<article id="5.5">
+	<h1>5.5 图形组合</h1>
+	<a href="#canvas_div13">代码清单2-13 图形组合</a>
+	<p>在HTML5中，只要用图形上下文对象的globalCompositeOperation属性就能自己决定图形的组合方式了，使用方法如下所示：
+	<xmp>
+	context.globalCompositeOperation = type
+	</xmp>
+	<p>type的值必须是下面几种字符串之一：
+	<dl style="margin-left: 25px;">
+		<dt>source-over(默认值)</dt>
+			<dd>source-over为globalCompositeOperation属性的默认值，表示新图形覆盖在原有图形之上。</dd>
+		<dt>destination-over</dt>
+			<dd>表示在原有图形之下绘制新图形</dd>
+		<dt>source-in</dt>
+			<dd>新图形与原有图形作in运算，只显示新图形中与原有图形相重叠的部分，新图形与原有图形的其他部分均变成透明。</dd>
+		<dt>destination-in</dt>
+			<dd>原有图形与新图形作in运算，只显示原有图形中与新图形相重叠的部分，新图形与原有图形的其他部分均变成透明。</dd>
+		<dt>source-out</dt>
+			<dd>新图形与原有图形作out运算，只显示新图形中与原有图形不重叠的部分，新图形与原有图形的其他部分均变成透明。</dd>
+		<dt>destination-out</dt>
+			<dd>原有图形与原有图形作out运算，只显示原有图形中与原有图形不重叠的部分，新图形与原有图形的其他部分均变成透明。</dd>
+		<dt>source-atop</dt>
+			<dd>只绘制新图形中与原有图形重叠的部分与未给重叠覆盖的原有图形，新图形的其他部分变成透明。</dd>
+		<dt>destination-atop</dt>
+			<dd>只绘制原有图形中被新图形重叠覆盖的部分与新图形的其他部分，原有图形中的其他部分变成透明，不绘制新图形中与原有图形相重叠的部分。</dd>
+		<dt>lighter</dt>
+			<dd>原有图形与新图形均绘制，重叠部分做加色处理。</dd>
+		<dt>xor</dt>
+			<dd>只绘制新图形中与原有图形不重跌的部分，重叠部分变成透明。</dd>
+		<dt>copy</dt>
+			<dd>值绘制新图形，原有图形中未与新图形重叠的部分变成透明。</dd>
+		
+	</dl>
+	<p>
 </article>
 
 <article id="">
@@ -196,6 +259,11 @@ article a:hover{
 	<canvas id="canvas512" width="400" height="300"></canvas>
 	<br>
 	<span>代码清单2-12 使用setTransform方法绘制变形图形</span>
+</div>
+<div id="canvas_div513">
+	<canvas id="canvas513" width="400" height="300"></canvas>
+	<br>
+	<span>代码清单2-13 图形组合</span>
 </div>
 
 <div id="canvas_div5">
