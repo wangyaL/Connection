@@ -9,7 +9,7 @@
 	//var openUrl = window.location.search;
 	var openUrl = "http://www.baidu.com";
 	try{
-		openUrl = openUrl.substring(1,openUrl.length);
+		//openUrl = openUrl.substring(1,openUrl.length);
 	}catch(e){
 		console.log(e);
 	}
@@ -26,7 +26,8 @@
 		window.location = "[scheme]://[host]?url="+openUrl;
 	}else if(isAndroid){
 		alert("isAndroid");
-		//window.location = "intent://localhost/"+"url="+openUrl+"#Intent;scheme=package;package=com.yuxu.zhijianlife;end";
+		//window.location = "znndd://localhost/url="+openUrl+"#Intent;scheme=znn;package=com.zhijianlife;end";
+		//window.open("znn://aa.bb:80/test?p=12&d=1");
 		//window.location = "znn://aa.bb:80/test?p=12&d=1";
 		/* var state = null;
 	    try {
@@ -39,7 +40,37 @@
 	    } else {
 	      window.location = "http://192.168.1.136";
 	    } */
-	    
+	    /* window.location = "znn://aa.bb:80/test?p=12&d=1";
+         setTimeout(function(){
+	     	window.location = "http://www.baidu.com";
+         }, 5000);  */
+         
+        /*  var url = "znn://aa.bb:80/test?p=12&d=1";
+         XMLHTTP = new ActiveXObject("Microsoft.XMLHTTP");
+         XMLHTTP.open("HEAD",url,false);
+         XMLHTTP.send();
+         alert(XMLHTTP.status);
+         return XMLHTTP.status==200 */
+        document.getElementById("openApp").click = function(){
+			var ifrSrc = "znn://";
+			var ifr = document.createElement("iframe");
+			ifr.src = ifrSrc;
+			//ifr.style.display = "none";
+			document.body.appendChild(ifr);
+			/* setTimeout(function(){
+				document.body.removeChild(ifr);
+			}, 1000); */
+         }
+		//alert(document.all+"");
+		if(document.all){
+			alert("==");
+			document.getElementById("openApp").click();
+		}else {
+			alert("==");
+		//	var e = document.createEvent("MouseEvents");
+		//	e.initEvent("click",true,true);
+		//	document.getElementById("openApp")dispatchEvent(e);
+		}
 	}else{
 		alert("isDesktop");
 		window.location.href = openUrl;
@@ -73,6 +104,6 @@ function testApp(url) {
 </script>
 <body>
 	
-
+<a id="openApp" style="" href="#">下载-APP</a>
 </body>
 </html>
