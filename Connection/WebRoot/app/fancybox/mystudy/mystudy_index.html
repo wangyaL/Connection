@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!-- Add jQuery library -->
+<script type="text/javascript" src="../jquery/jquery-latest.min.js"></script>
+<!-- <script type="text/javascript" src="../jquery/jquery-1.9.1.js"></script> -->
+
+<!-- Add mousewheel plugin (this is optional) -->
+<script type="text/javascript" src="../lib/jquery.mousewheel-3.0.6.pack.js"></script>
+
+<!-- Add fancyBox -->
+<link rel="stylesheet" href="../source/jquery.fancybox.css" type="text/css" media="screen" />
+<script type="text/javascript" src="../source/jquery.fancybox.pack.js"></script>
+
+<!-- Optionally add helpers - button, thumbnail and/or media -->
+<link rel="stylesheet" href="../source/helpers/jquery.fancybox-buttons.css" type="text/css" media="screen" />
+<script type="text/javascript" src="../source/helpers/jquery.fancybox-buttons.js"></script>
+<script type="text/javascript" src="../source/helpers/jquery.fancybox-media.js"></script>
+
+<link rel="stylesheet" href="../source/helpers/jquery.fancybox-thumbs.css" type="text/css" media="screen" />
+<script type="text/javascript" src="../source/helpers/jquery.fancybox-thumbs.js"></script>
+
+
+<style type="text/css">
+#guanwang{
+	margin-left: 20px;
+	display: block; /* 将链接设为块级元素 */
+	padding: 10px; /* 设置内边距 */
+	width: 120px;
+	/* background:#3A4953; */ /* 设置背景色 */
+	color: blue; /* 设置文字颜色 */
+	text-decoration: none; /* 去掉下划线 */
+	/* border-right: 1px solid #000; */ /* 在左侧加上分隔线 */
+	height: 15px;
+}
+#guanwang:hover{
+	/* background:#2E7AAD; */
+	color: red;
+}
+.custom_div{
+	margin: 20px;
+}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			openEffect	: 'none',	//none,elastic
+	    	closeEffect	: 'elastic',	//none,elastic
+			helpers: {
+	              title : {
+	                  type : 'float'	//float,inside,outside,over
+	              }
+	          }
+		});
+		$(".fancybox2").fancybox({
+			openEffect	: 'elastic',
+	    	closeEffect	: 'elastic',
+			direction: {			//切换时候的效果
+       			next : 'left',
+       			prev : 'right'
+				
+			},
+			helpers: {
+				title : {
+					type : 'inside'	//float,inside,outside,over
+				}
+			},
+		});
+		$(".fancybox3").fancybox();
+	});
+</script>
+
+</head>
+<body>
+	<a id="guanwang" href="http://fancyapps.com/fancybox/" target="_blank" title="进入官网查看demo">fancyBox官网API</a>
+	<hr>
+	<div class="custom_div">
+		第一排<br>
+		<a class="fancybox" rel="group" href="./goods/5.jpg" title="第一排第一个图片">
+			<img src="./goods/small/5.jpg" alt="" /></a>
+		<a class="fancybox" rel="group" href="./goods/2.png" title="第一排第二个图片">
+			<img src="./goods/small/3.jpg" alt="" /></a>
+	</div>
+	
+	<div class="custom_div">
+		第二排<br>
+		<a class="fancybox2" rel="group" href="./goods/3.jpg" title="第二排第一个图片">
+			<img src="./goods/small/3.jpg" alt="" /></a>
+		<a class="fancybox2" rel="group" href="./goods/4.jpg" title="第二排第二个图片">
+			<img src="./goods/small/4.jpg" alt="" /></a>
+		<a class="fancybox2" rel="group" href="./goods/1.jpg" title="第二排第三个图片">
+			<img src="./goods/small/4.jpg" alt="" /></a>
+	</div>
+	
+	<div class="custom_div">
+		第三排<br>
+		<a class="fancybox3" rel="group" href="./goods/3.jpg">
+			<img src="./goods/small/3.jpg" alt="" /></a>
+		<a class="fancybox3" rel="group" href="./goods/4.jpg">
+			<img src="./goods/small/4.jpg" alt="" /></a>
+		<a class="fancybox3" rel="group" href="./goods/1.jpg">
+			<img src="./goods/small/4.jpg" alt="" /></a>
+	</div>
+
+</body>
+</html>
